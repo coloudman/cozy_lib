@@ -1,2 +1,1 @@
-# cozy_lib
-COZY library for extends.
+COZY Libs for Code extends.
