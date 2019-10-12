@@ -14,6 +14,11 @@ class LinkingPoint extends EventEmitter {
         return this._linkedCode;
     }
 
+    constructor(linkedCode : Code = undefined) {
+        super();
+        this._linkedCode = linkedCode;
+    }
+
     link(code : Code) {
         this.emit("link", code);
         this._linkedCode = code;

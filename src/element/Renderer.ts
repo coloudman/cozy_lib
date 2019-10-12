@@ -1,8 +1,5 @@
-import Code from "./Code";
+import Controller from "./Controller";
 
-export default class Renderer {
-    code: Code;
-    constructor(code : Code) {
-        this.code = code;
-    }
+export default abstract class Renderer extends Controller<Renderer> {
+    
 };

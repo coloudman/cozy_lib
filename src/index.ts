@@ -8,7 +8,7 @@ import Code from "./Element/Code"
 import Renderer from "./Element/Renderer"
 import Compiler from "./Element/Compiler"
 
-import CodeData from "./struct/CodeData"
+import CodeData from "./struct/Data"
 
 export {
     CodePackage,

@@ -1,23 +1,19 @@
 
-export default class CodeLoader {
-    constructor(codePackages) {
-        this.codePackages = codePackages;
-    }
+import Loader from "./Loader";
+import Code from "../Element/Code";
+import CodePackage from "../Package/CodePackage";
+import Data from "@src/struct/Data";
 
-    loadCode(codeData) {
-        const codePackage = Object.values(this.codePackages).find(codePackage => {
-            return codeData.packageId === codePackage.id && codeData.packageVersion === codePackage.version;
+export default class CodeLoader extends Loader<Code, CodePackage> {
+
+    load(data : Data) : Code {
+        const foundPackage = Object.values(this.packages).find((package_ : PackageT) => {
+            return data.packageId === package_.id && data.packageVersion === package_.version;
         });
-        if(!codePackage) {
-            throw new Error("codePackage not found");
-        }
 
-        const Code = codePackage.body[codeData.id]
-        if(!Code) {
-            throw new Error("Code class not found");
-        }
+        const Class = foundPackage.body[data.id];
 
-        const code = new Code(codeData.data, this.loadCode.bind(this));
-        return code;
+        const instance = new Class(data.data, this.load.bind(this));
+        return instance;
     }
 }

@@ -1,6 +1,6 @@
 
 import LinkingPoint from "./LinkingPoint";
-import CodeData from "@src/struct/CodeData";
+import Data from "@src/struct/Data";
 
 /**
  * Load Code from codeData object(json)
@@ -11,7 +11,7 @@ import CodeData from "@src/struct/CodeData";
 
 export default abstract class Code {
 
-    loadCode: (codeData : CodeData) => Code
+    loadCode: (data : Data) => Code
     data: object
 
     linkingPoints: {
@@ -21,7 +21,7 @@ export default abstract class Code {
     
     abstract init(): any
 
-    constructor(data : object, loadCode : (codeData : CodeData) => Code) {
+    constructor(data : object, loadCode : (data : Data) => Code) {
         this.data = data;
         this.loadCode = loadCode;
         this.linkingPoints = {};

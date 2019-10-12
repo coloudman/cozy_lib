@@ -1,8 +1,3 @@
-import Code from "./Code";
+import Controller from "./Controller";
 
-export default class Compiler {
-    code: Code;
-    constructor(code : Code) {
-        this.code = code;
-    }
-};
+export default abstract class Compiler extends Controller {};
