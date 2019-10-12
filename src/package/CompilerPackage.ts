@@ -1,4 +1,4 @@
-import Compiler from "../element/Compiler";
+import Compiler from "../Element/Compiler";
 
 interface CompilerPackageBody {
     [name : string]: typeof Compiler

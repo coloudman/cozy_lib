@@ -1,4 +1,4 @@
-import Renderer from "../element/Renderer";
+import Renderer from "../Element/Renderer";
 
 interface RendererPackageBody {
     [name : string]: typeof Renderer

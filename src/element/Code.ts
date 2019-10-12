@@ -1,5 +1,6 @@
 
 import LinkingPoint from "./LinkingPoint";
+import CodeData from "@src/struct/CodeData";
 
 /**
  * Load Code from codeData object(json)
@@ -7,13 +8,6 @@ import LinkingPoint from "./LinkingPoint";
  * @param {Object} codeData
  * @return {Code}
 */
-
-interface CodeData {
-    packageId: string
-    packageVersion: string
-    id: string
-    data: object
-}
 
 export default abstract class Code {
 
@@ -47,7 +41,3 @@ export default abstract class Code {
         this.linkingPoints[name].emit("unlink");
     }
 };
-
-function a(code : Code) {
-    const linkingPoint = code.addLinkingPoint("A");
-}

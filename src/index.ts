@@ -1,18 +1,23 @@
 
 
-import CodePackage from "./package/CodePackage"
-import RendererPackage from "./package/RendererPackage"
-import CompilerPackage from "./package/CompilerPackage"
+import CodePackage from "./Package/CodePackage"
+import RendererPackage from "./Package/RendererPackage"
+import CompilerPackage from "./Package/CompilerPackage"
 
-import Code from "./element/Code"
-import Renderer from "./element/Renderer"
-import Compiler from "./element/Compiler"
+import Code from "./Element/Code"
+import Renderer from "./Element/Renderer"
+import Compiler from "./Element/Compiler"
+
+import CodeData from "./struct/CodeData"
 
 export {
     CodePackage,
     RendererPackage,
     CompilerPackage,
+
     Code, 
     Renderer,  
-    Compiler
+    Compiler,
+
+    CodeData
 };
