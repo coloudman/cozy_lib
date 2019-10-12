@@ -1,10 +1,9 @@
 {
   "name": "cozy_lib",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "cozy lib",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
   "keywords": [
