@@ -9,7 +9,20 @@ declare interface LinkingPoint {
 }
 
 class LinkingPoint extends EventEmitter {
+    private _linkedCode : Code
+    get linkedCode() {
+        return this._linkedCode;
+    }
 
+    link(code : Code) {
+        this.emit("link", code);
+        this._linkedCode = code;
+    }
+
+    unlink() {
+        this.emit("unlink", this._linkedCode)
+        this._linkedCode = undefined;
+    }
 }
 
 export default LinkingPoint;

@@ -1,16 +1,11 @@
 import LinkingPoint from "./LinkingPoint";
+import CodeData from "@src/struct/CodeData";
 /**
  * Load Code from codeData object(json)
  * @function loadCode
  * @param {Object} codeData
  * @return {Code}
 */
-interface CodeData {
-    packageId: string;
-    packageVersion: string;
-    id: string;
-    data: object;
-}
 export default abstract class Code {
     loadCode: (codeData: CodeData) => Code;
     data: object;
@@ -23,4 +18,3 @@ export default abstract class Code {
     link(name: string, code: Code): void;
     unlink(name: string): void;
 }
-export {};

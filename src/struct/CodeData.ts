@@ -1,8 +1,4 @@
 
+import Data from "./Data";
 
-export default interface CodeData {
-    packageId: string
-    packageVersion: string
-    id: string
-    data: object
-}
+export default interface CodeData extends Data {}

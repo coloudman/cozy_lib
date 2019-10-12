@@ -1,4 +1,4 @@
-import Code from "../element/Code";
+import Code from "../Element/Code";
 interface CodePackageBody {
     [name: string]: typeof Code;
 }
