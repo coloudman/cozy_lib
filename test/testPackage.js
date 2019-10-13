@@ -3,7 +3,6 @@ const { Code } = require("../dist/index.js");
 
 class Plus extends Code {
     init() {
-        console.log("Plus!");
         if(!this.linkingPoints.first) {
             this.addLinkingPoint("first");
         }
@@ -15,7 +14,6 @@ class Plus extends Code {
 
 class Number extends Code {
     init() {
-        console.log("Number!");
     }
     setNumber(number) {
         this.data.number = number;

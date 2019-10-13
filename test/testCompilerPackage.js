@@ -3,7 +3,6 @@ const { Compiler } = require("../dist/index.js");
 
 class Plus extends Compiler {
     init() {
-        console.log("Compiler! - Plus");
 
     }
     compile() {
@@ -13,7 +12,7 @@ class Plus extends Compiler {
 
 class Number extends Compiler {
     init() {
-        console.log("Compiler! - Number")
+        
     }
     compile() {
         return this.code.getNumber()+"";

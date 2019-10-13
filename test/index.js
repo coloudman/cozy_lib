@@ -88,3 +88,5 @@ mix.linkingPoints.second.link(new Mix(codeLoader, {
 
 //컴파일 최고!
 console.log(mix.controllers.compiler.compile());
+
+console.log(JSON.stringify(mixData));
