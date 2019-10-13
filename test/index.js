@@ -62,6 +62,8 @@ const mix = new Mix(codeLoader, {
 console.log(mix);
 
 
+console.log("----링크함----")
+
 //링크 해봄
 mix.linkingPoints.second.link(new Mix(codeLoader, {
     compiler:compilerLoader
@@ -84,6 +86,8 @@ mix.linkingPoints.second.link(new Mix(codeLoader, {
     },
     linkingPointsData:{}
 }))
+
+console.log(mix);
 
 
 //컴파일 최고!

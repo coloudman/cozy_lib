@@ -5,6 +5,7 @@ import Code from "../Element/Code";
 import LinkingPoint from "../structClass/LinkingPoint";
 import MixData from "../struct/MixData";
 import ControllerData from "../struct/ControllerData";
+import LinkedControllers from "@src/structClass/LinkedControllers";
 declare type ControllerLoaders = {
     [name: string]: ControllerLoader<any>;
 };
@@ -18,9 +19,13 @@ export default class Mix {
     code: Code;
     controllers: Controllers;
     linkingPoints: {
-        [name: string]: LinkingPoint;
+        [controllerName: string]: LinkingPoint;
+    };
+    linkedControllerses: {
+        [controllerName: string]: LinkedControllers<Controller<any, any>>;
     };
     constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixData: MixData);
+    makeLinkedControllers(controllerName: string): LinkedControllers<Controller<any, any>>;
     addLinkingPoint(name: string): void;
     removeLinkingPoint(name: string): void;
     linkController(name: string, controllerData: ControllerData): void;

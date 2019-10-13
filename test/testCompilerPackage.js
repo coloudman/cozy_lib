@@ -6,7 +6,7 @@ class Plus extends Compiler {
 
     }
     compile() {
-        return `(${this.code.linkingPoints.first.linkedMix.controllers.compiler.compile()}) + (${this.code.linkingPoints.second.linkedMix.controllers.compiler.compile()})`;
+        return `(${this.linkedControllers.first.compile()}) + (${this.linkedControllers.second.compile()})`;
     }
 }
 
