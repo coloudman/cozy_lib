@@ -4,7 +4,8 @@
   "description": "cozy lib",
   "main": "dist/index.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "keywords": [
     "cozy",
@@ -13,6 +14,7 @@
   "author": "Coloud",
   "license": "Unlicense",
   "dependencies": {
+    "express": "^4.17.1",
     "wolfy87-eventemitter": "^5.2.8"
   },
   "devDependencies": {

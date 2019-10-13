@@ -1,5 +1,4 @@
-import Code from "./Code";
-export default class Renderer {
-    code: Code;
-    constructor(code: Code);
+import RendererData from "@src/struct/RendererData";
+import Controller from "./Controller";
+export default abstract class Renderer extends Controller<RendererData, Renderer> {
 }

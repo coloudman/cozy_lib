@@ -1,6 +1,9 @@
 
-import LinkingPoint from "./LinkingPoint";
-import Data from "@src/struct/Data";
+import Element from "./Element";
+
+import CodeData from "../struct/CodeData";
+import LinkingPoints from "../structClass/LinkingPoints";
+import Mix from "../Mix/Mix";
 
 /**
  * Load Code from codeData object(json)
@@ -9,35 +12,17 @@ import Data from "@src/struct/Data";
  * @return {Code}
 */
 
-export default abstract class Code {
+export default abstract class Code extends Element<CodeData, Code> {
+    linkingPoints: LinkingPoints;
+    readonly addLinkingPoint: (name : string) => Mix;
 
-    loadCode: (data : Data) => Code
-    data: object
-
-    linkingPoints: {
-        [name : string]:LinkingPoint
-    }
-
-    
-    abstract init(): any
-
-    constructor(data : object, loadCode : (data : Data) => Code) {
-        this.data = data;
-        this.loadCode = loadCode;
-        this.linkingPoints = {};
-
+    constructor(data : object, mix : Mix) {
+        super(data);
+        this.linkingPoints = mix.linkingPoints;
+        this.addLinkingPoint = mix.addLinkingPoint.bind(mix);
+        
         this.init();
     }
 
-    addLinkingPoint(name : string) {
-        return this.linkingPoints[name] = new LinkingPoint();
-    }
-
-    link(name : string, code : Code) {
-        this.linkingPoints[name].emit("link", code);
-    }
-
-    unlink(name : string) {
-        this.linkingPoints[name].emit("unlink");
-    }
+    abstract init(): any
 };

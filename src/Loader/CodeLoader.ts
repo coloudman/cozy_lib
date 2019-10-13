@@ -2,18 +2,21 @@
 import Loader from "./Loader";
 import Code from "../Element/Code";
 import CodePackage from "../Package/CodePackage";
-import Data from "@src/struct/Data";
+import CodeData from "../struct/CodeData";
 
-export default class CodeLoader extends Loader<Code, CodePackage> {
+import LinkingPoints from "@src/structClass/LinkingPoints";
+import Mix from "../Mix/Mix";
 
-    load(data : Data) : Code {
-        const foundPackage = Object.values(this.packages).find((package_ : PackageT) => {
+export default class CodeLoader extends Loader<CodePackage> {
+
+    load(data : CodeData, mix : Mix) : Code {
+        const foundPackage = Object.values(this.packages).find((package_ : CodePackage) => {
             return data.packageId === package_.id && data.packageVersion === package_.version;
         });
 
         const Class = foundPackage.body[data.id];
 
-        const instance = new Class(data.data, this.load.bind(this));
+        const instance = new Class(data.data, mix);
         return instance;
     }
 }

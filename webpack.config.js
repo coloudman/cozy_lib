@@ -3,7 +3,8 @@ path = require("path"),
 DeclarationBundlerPlugin = require('declaration-bundler-webpack-plugin');
 
 module.exports = {
-    mode:"production",
+    //mode:"production",
+    mode: "development",
     target: 'node',
     entry:{
         index:"./src/index.ts"
@@ -27,5 +28,8 @@ module.exports = {
       extensions: ['.ts', '.js', '.json']
     },
     plugins: [
+    ],
+    externals: [
+
     ]
 };

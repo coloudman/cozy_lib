@@ -1,4 +1,6 @@
 
-import Data from "./Data";
+import ControllerData from "./ControllerData";
 
-export default interface RendererData extends Data {}
+export default interface RendererData extends ControllerData {
+    
+}

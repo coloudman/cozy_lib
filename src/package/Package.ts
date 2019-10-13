@@ -1,12 +1,12 @@
 
-import Data from "@src/struct/Data"
+import Element from "../Element/Element";
 
-interface PackageBody<T> {
-    [name : string]: { new(data : object, load : (data : Data) => T, ...any:any):T }
-}
-
-export default interface Package<T> {
+export default interface Package<T extends Element<any, any>> {
     id: string
     version: string
-    body: PackageBody<T>
+    body: {
+        [name:string]: {
+            new(...args:any): T
+        }
+    }
 };

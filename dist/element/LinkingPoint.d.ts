@@ -6,5 +6,10 @@ declare interface LinkingPoint {
     on(event: RegExp, listener: Function): this;
 }
 declare class LinkingPoint extends EventEmitter {
+    private _linkedCode;
+    readonly linkedCode: Code;
+    constructor(linkedCode?: Code);
+    link(code: Code): void;
+    unlink(): void;
 }
 export default LinkingPoint;

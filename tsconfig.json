@@ -4,18 +4,17 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "module": "commonjs",
-        "target": "esnext",
+        "target": "es2017",
         "esModuleInterop": true,
         "declaration": true,
         "baseUrl": ".",
         "paths": {
-            "@src/*":[
-                "./src/*"
-            ]
+            "@src/*":["src/*"]
         },
-        "lib": ["dom","esnext"]
+        "lib": ["dom","es2017"]
     },
     "include": [
-        "./src/*"
+        "./src/*",
+        "./src/**/*"
     ]
 }

@@ -1,15 +1,15 @@
 
 import Package from "../Package/Package";
 
-type Packages<T, PackageT extends Package<T>> = {
+type Packages<PackageT extends Package<any>> = {
     [name:string]: PackageT
 }
 
 
-export default class Loader<T, PackageT extends Package<T>> {
-    packages: Packages<T, PackageT>
+export default class Loader<PackageT extends Package<any>> {
+    packages: Packages<PackageT>
 
-    constructor(packages : Packages<T, PackageT>) {
+    constructor(packages : Packages<PackageT>) {
         this.packages = packages;
     }
 }

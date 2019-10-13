@@ -1,10 +1,10 @@
 import Code from "../Element/Code";
-interface CodePackageBody {
-    [name: string]: typeof Code;
+import Package from "./Package";
+import Mix from "../Mix/Mix";
+export default interface CodePackage extends Package<Code> {
+    body: {
+        [name: string]: {
+            new (data: object, mix: Mix): Code;
+        };
+    };
 }
-export default interface CodePackage {
-    id: string;
-    version: string;
-    body: CodePackageBody;
-}
-export {};

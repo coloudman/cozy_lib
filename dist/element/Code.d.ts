@@ -1,20 +1,16 @@
-import LinkingPoint from "./LinkingPoint";
-import CodeData from "@src/struct/CodeData";
+import Element from "./Element";
+import CodeData from "../struct/CodeData";
+import LinkingPoints from "../structClass/LinkingPoints";
+import Mix from "../Mix/Mix";
 /**
  * Load Code from codeData object(json)
  * @function loadCode
  * @param {Object} codeData
  * @return {Code}
 */
-export default abstract class Code {
-    loadCode: (codeData: CodeData) => Code;
-    data: object;
-    linkingPoints: {
-        [name: string]: LinkingPoint;
-    };
+export default abstract class Code extends Element<CodeData, Code> {
+    linkingPoints: LinkingPoints;
+    readonly addLinkingPoint: (name: string) => Mix;
+    constructor(data: object, mix: Mix);
     abstract init(): any;
-    constructor(data: object, loadCode: (codeData: CodeData) => Code);
-    addLinkingPoint(name: string): LinkingPoint;
-    link(name: string, code: Code): void;
-    unlink(name: string): void;
 }
