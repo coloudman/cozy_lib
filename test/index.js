@@ -23,14 +23,6 @@ const mixData = {
         id:"Plus",
         data:{}
     },
-    controllerDatas:{
-        compiler:{
-            packageId:"JS_MATH",
-            packageVersion:"1",
-            id:"Plus",
-            data:{}
-        }
-    },
     linkingPointsData:{
         first:{
             codeData:{
@@ -39,14 +31,6 @@ const mixData = {
                 id:"Number",
                 data:{
                     number:8
-                }
-            },
-            controllerDatas:{
-                compiler:{
-                    packageId:"JS_MATH",
-                    packageVersion:"1",
-                    id:"Number",
-                    data:{}
                 }
             },
             linkingPointsData:{}
@@ -76,14 +60,6 @@ mix.linkingPoints.second.link(new Mix(codeLoader, {
             number:166
         }
     },
-    controllerDatas:{
-        compiler:{
-            packageId:"JS_MATH",
-            packageVersion:"1",
-            id:"Number",
-            data:{}
-        }
-    },
     linkingPointsData:{}
 }))
 
@@ -93,4 +69,4 @@ console.log(mix);
 //컴파일 최고!
 console.log(mix.controllers.compiler.compile());
 
-console.log(JSON.stringify(mixData));
+console.log(JSON.stringify(mixData, null, 2));

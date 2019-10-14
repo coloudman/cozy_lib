@@ -1,16 +1,13 @@
 import Code from "./Code";
-import ControllerData from "@src/struct/ControllerData";
-import Element from "./Element";
 
-import LinkingPointsData from "@src/struct/LinkingPointsData";
 import LinkedControllers from "@src/structClass/LinkedControllers";
 
-export default abstract class Controller<DataT extends ControllerData, ElementT extends Element<DataT, ElementT>> extends Element<DataT, ElementT>{
+export default abstract class Controller {
     code: Code
-    linkedControllers: LinkedControllers<Controller<DataT, ElementT>>
+    linkedControllers: LinkedControllers<Controller>
 
-    constructor(data : object, code : Code, linkedControllers : LinkedControllers<Controller<DataT, ElementT>>) {
-        super(data);
+    constructor(code : Code, linkedControllers : LinkedControllers<Controller>) {
+
         this.code = code;
         this.linkedControllers = linkedControllers;
 

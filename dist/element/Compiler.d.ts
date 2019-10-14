@@ -1,5 +1,4 @@
 import Controller from "./Controller";
-import CompilerData from "@src/struct/CompilerData";
-export default abstract class Compiler extends Controller<CompilerData, Compiler> {
+export default abstract class Compiler extends Controller {
     abstract compile(): any;
 }

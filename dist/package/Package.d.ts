@@ -1,5 +1,4 @@
-import Element from "../Element/Element";
-export default interface Package<T extends Element<any, any>> {
+export default interface Package<T> {
     id: string;
     version: string;
     body: {
