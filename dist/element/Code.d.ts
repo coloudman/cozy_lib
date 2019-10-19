@@ -10,6 +10,7 @@ export default abstract class Code {
     data: object;
     linkingPoints: LinkingPoints;
     readonly addLinkingPoint: (name: string) => Mix;
+    readonly addDefaultLinkingPoints: (name: [string]) => void;
     constructor(data: object, mix: Mix);
     abstract init(): any;
 }

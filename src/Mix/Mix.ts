@@ -20,13 +20,16 @@ export default class Mix {
     mixData: MixData;
 
     code: Code;
-    controllers: Controllers;
 
     linkingPoints: {
-        [controllerName: string] : LinkingPoint
+        [linkingPointName: string] : LinkingPoint
     }
+
+    controllers: Controllers
+
+    //특정 타입 컨트롤러가 접근할 수 있는 링킹포인트에 있는 같은 타입의 컨트롤러들을 저장합니다. linkControllerses[컨트롤러 타입][링킹포인트 이름]
     linkedControllerses: {
-        [controllerName: string] : LinkedControllers<Controller>
+        [controllerName: string] : LinkedControllers
     }
 
     constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixData : MixData) {
@@ -35,77 +38,89 @@ export default class Mix {
         this.controllerLoaders = controllerLoaders;
         this.mixData = mixData;
 
-        this.controllers = {};
         this.linkingPoints = {};
 
-        this.linkedControllerses = {}
+        this.linkedControllerses = {};
+        this.controllers = {};
 
 
         // 연결점 제작
         Object.entries(mixData.linkingPointsData).forEach(([name, data])=>{
-            const point = new Mix(codeLoader, controllerLoaders, data); //자기자신을 생성
-            this.linkingPoints[name] = new LinkingPoint(point);
+            this.addLinkingPoint(name);
+            this.link(name, data);
         });
 
         // 코드 제작
         this.code = this.codeLoader.load(mixData.codeData, this);
-
-        // 컨트롤러 제작
-        Object.entries(controllerLoaders).forEach(([controllerLoaderName, controllerLoader]) => {
-            const linkedControllers = this.makeLinkedControllers(controllerLoaderName);
-            this.controllers[controllerLoaderName] = controllerLoader.load(this.code, this.mixData.codeData, linkedControllers);
-        });
-
-
-        /*
-        특정 Controller는 Code에만 접근 할 것.
-        Mix로 접근 비권장.
-        */
     }
 
-    //유틸적인 '멤버' 임, 특정 컨트롤러에 대한 연결 관계를 생성함. 갱신도 되지만 갱신용으로는 쓰지 말자..
-    makeLinkedControllers(controllerName : string) {
-        const linkedControllers = {} as LinkedControllers<Controller>;
-        Object.entries(this.linkingPoints).forEach(([linkingPointName, linkingPoint]) => {
-            if(linkingPoint.linkedMix) {
-                linkedControllers[linkingPointName] = linkingPoint.linkedMix.controllers[controllerName];
+    loadMix(mixData : MixData) {
+        return new Mix(this.codeLoader, this.controllerLoaders, mixData)
+    }
+
+    // 연결점 관련
+
+    addDefaultLinkingPoints(names : [ string ]) {
+        names.forEach(name => {
+            if(!this.linkingPoints[name]) {
+                this.addLinkingPoint(name);
             }
         });
-        return this.linkedControllerses[controllerName] = linkedControllers;
     }
-
-    // 연결점 연결
     addLinkingPoint(name : string) {
         this.linkingPoints[name] = new LinkingPoint();
-
-        //중요! 연결점에 기본 이벤트 등록
-        this.linkingPoints[name]
-        .on("link", (mix: Mix) => {
-            //링킹포인트데이터 등록
-            this.mixData.linkingPointsData[name] = {
-                codeData:mix.mixData.codeData,
-                linkingPointsData:mix.mixData.linkingPointsData
-            };
-            //LinkedControllers 갱신
-            Object.entries(mix.controllers).forEach(([controllerName, controller]) => {
-                this.linkedControllerses[controllerName][name] = controller;
-            });
-        })
-        .on("unlink", (mix:Mix) => {
-            //링킹포인트데이터 삭제
-            delete this.mixData.linkingPointsData[name];
-            //LinkedControllers에서 삭제
-            Object.entries(mix.controllers).forEach(([controllerName, controller]) => {
-                delete this.linkedControllerses[controllerName][name];
-            });
-        })
     }
     removeLinkingPoint(name : string) {
         delete this.linkingPoints[name];
     }
+    link(name : string, mixData : MixData) {
+
+        //링킹포인트데이터 등록
+        this.mixData.linkingPointsData[name] = {
+            codeData:mixData.codeData,
+            linkingPointsData:mixData.linkingPointsData
+        };
+
+        //Mix 로딩해서 등록
+        this.linkingPoints[name].link(this.loadMix(mixData));
+
+        //기존에 있던 컨트롤러-링킹포인트 접근 오브젝트들에 이 링킹포인트 추가
+        Object.entries(this.linkedControllerses).forEach(([controllerType, controllers]) => {
+            controllers[name] = this.linkingPoints[name].linkedMix.addController(controllerType);
+        });
+    }
+    unlink(name : string) {
+        delete this.linkingPoints[name];
+        delete this.mixData.linkingPointsData[name];
+    }
+
+    //유틸, 모든 연결된 연결점에서 실행
+    runOnExistLinkingPoints(f : (linkingPointName : string, linkedMix : Mix) => any) {
+        Object.entries(this.linkingPoints).forEach(([linkingPointName, linkingPoint]) => {
+            if(linkingPoint.linkedMix) {
+                f(linkingPointName, linkingPoint.linkedMix);
+            }
+        });
+    }
 
     // 컨트롤러 연결
-    linkController(name : string) {
-        this.controllers[name] = this.controllerLoaders[name].load(this.code, this.mixData.codeData, this.makeLinkedControllers(name));
+    addController(name : string): Controller {
+        const linkedControllers = {} as LinkedControllers;
+        this.runOnExistLinkingPoints((linkingPointName, linkedMix) => {
+            linkedControllers[linkingPointName] = linkedMix.addController(name);
+        });
+        this.linkedControllerses[name] = linkedControllers;
+
+        const controller = this.controllerLoaders[name].load(this.code, this.mixData.codeData, linkedControllers);
+
+        this.controllers[name] = controller;
+        return controller;
+    }
+    removeController(name : string) {
+        this.runOnExistLinkingPoints((linkingPointName, linkedMix) => {
+            linkedMix.removeController(name);
+        });
+        delete this.linkedControllerses[name];
+        delete this.controllers[name];
     }
 }

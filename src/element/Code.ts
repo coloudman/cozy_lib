@@ -13,13 +13,15 @@ import Mix from "../Mix/Mix";
 
 export default abstract class Code {
     data: object;
-    linkingPoints: LinkingPoints;
+    linkingPoints: LinkingPoints
     readonly addLinkingPoint: (name : string) => Mix;
+    readonly addDefaultLinkingPoints: (name : [string]) => void;
 
     constructor(data : object, mix : Mix) {
         this.data = data;
         this.linkingPoints = mix.linkingPoints;
         this.addLinkingPoint = mix.addLinkingPoint.bind(mix);
+        this.addDefaultLinkingPoints = mix.addDefaultLinkingPoints;
         
         this.init();
     }

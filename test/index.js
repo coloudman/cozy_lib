@@ -1,7 +1,7 @@
 
-const { Mix, CodeLoader, CompilerLoader } = require("../dist/index");
-const testPackage = require("./testPackage");
-const testCompilerPackage = require("./testCompilerPackage");
+const { Mix, CodeLoader, CompilerLoader, Area } = require("../dist/index");
+const testPackage = require("./MATHCodePackage");
+const testCompilerPackage = require("./JS_MATH_CompilerPackage");
 
 //코드 클래스를 보관함
 const codePackages = {
@@ -20,7 +20,7 @@ const mixData = {
     codeData:{
         packageId:"MATH",
         packageVersion:"1",
-        id:"Plus",
+        id:"Add",
         data:{}
     },
     linkingPointsData:{
@@ -39,34 +39,49 @@ const mixData = {
 };
 
 //코드 클래스들을 엮어줌
-const mix = new Mix(codeLoader, {
+const area = new Area(codeLoader, {
     compiler:compilerLoader
-}, mixData);
+});
+area.addController("compiler");
 
-console.log(mix);
-
-
-console.log("----링크함----")
+const mix = area.addMix(mixData);
 
 //링크 해봄
-mix.linkingPoints.second.link(new Mix(codeLoader, {
-    compiler:compilerLoader
-}, {
+mix.link("second",{
+    codeData:{
+        packageId:"MATH",
+        packageVersion:"1",
+        id:"Subtract",
+        data:{}
+    },
+    linkingPointsData:{}
+});
+
+mix.linkingPoints.second.linkedMix.link("first",{
     codeData:{
         packageId:"MATH",
         packageVersion:"1",
         id:"Number",
         data:{
-            number:166
+            number:80
         }
     },
     linkingPointsData:{}
-}))
+});
 
-console.log(mix);
-
+mix.linkingPoints.second.linkedMix.link("second",{
+    codeData:{
+        packageId:"MATH",
+        packageVersion:"1",
+        id:"Number",
+        data:{
+            number:40
+        }
+    },
+    linkingPointsData:{}
+})
 
 //컴파일 최고!
-console.log(mix.controllers.compiler.compile());
+console.log(area.getController("compiler")[0].compile());
 
 console.log(JSON.stringify(mixData, null, 2));

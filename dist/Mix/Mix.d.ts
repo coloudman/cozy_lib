@@ -13,17 +13,22 @@ export default class Mix {
     codeLoader: CodeLoader;
     mixData: MixData;
     code: Code;
-    controllers: Controllers;
     linkingPoints: {
-        [controllerName: string]: LinkingPoint;
+        [linkingPointName: string]: LinkingPoint;
     };
+    controllers: Controllers;
     linkedControllerses: {
-        [controllerName: string]: LinkedControllers<Controller>;
+        [controllerName: string]: LinkedControllers;
     };
     constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixData: MixData);
-    makeLinkedControllers(controllerName: string): LinkedControllers<Controller>;
+    loadMix(mixData: MixData): Mix;
+    addDefaultLinkingPoints(names: [string]): void;
     addLinkingPoint(name: string): void;
     removeLinkingPoint(name: string): void;
-    linkController(name: string): void;
+    link(name: string, mixData: MixData): void;
+    unlink(name: string): void;
+    runOnExistLinkingPoints(f: (linkingPointName: string, linkedMix: Mix) => any): void;
+    addController(name: string): Controller;
+    removeController(name: string): void;
 }
 export {};

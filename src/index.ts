@@ -20,6 +20,7 @@ import RendererLoader from "./Loader/RendererLoader";
 import CompilerLoader from "./Loader/CompilerLoader";
 
 import Mix from "./Mix/Mix";
+import Area from "./Area/Area";
 
 export {
     Package,
@@ -41,5 +42,7 @@ export {
     RendererLoader,
     CompilerLoader,
 
-    Mix
+    Mix,
+
+    Area
 };

@@ -14,4 +14,5 @@ import ControllerLoader from "./Loader/CompilerLoader";
 import RendererLoader from "./Loader/RendererLoader";
 import CompilerLoader from "./Loader/CompilerLoader";
 import Mix from "./Mix/Mix";
-export { Package, CodePackage, ControllerPackage, RendererPackage, CompilerPackage, Code, Controller, Renderer, Compiler, CodeData, Loader, CodeLoader, ControllerLoader, RendererLoader, CompilerLoader, Mix };
+import Area from "./Area/Area";
+export { Package, CodePackage, ControllerPackage, RendererPackage, CompilerPackage, Code, Controller, Renderer, Compiler, CodeData, Loader, CodeLoader, ControllerLoader, RendererLoader, CompilerLoader, Mix, Area };

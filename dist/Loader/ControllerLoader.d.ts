@@ -5,5 +5,5 @@ import ControllerPackage from "../Package/ControllerPackage";
 import LinkedControllers from "@src/structClass/LinkedControllers";
 import CodeData from "../struct/CodeData";
 export default class ControllerLoader<T extends Controller> extends Loader<ControllerPackage<T>> {
-    load(code: Code, codeData: CodeData, linkedControllers: LinkedControllers<Controller>): T;
+    load(code: Code, codeData: CodeData, linkedControllers: LinkedControllers): T;
 }
