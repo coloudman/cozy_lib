@@ -1,10 +1,11 @@
-const JsDocPlugin = require("jsdoc-webpack-plugin"),
-path = require("path"),
-DeclarationBundlerPlugin = require('declaration-bundler-webpack-plugin');
+const development = process.env.dev === "true" ? true : false;
+
+console.log(development);
+
+const path = require("path");
 
 module.exports = {
-    //mode:"production",
-    mode: "development",
+    mode: development ? "development" : "production",
     target: 'node',
     entry:{
         index:"./src/index.ts"
