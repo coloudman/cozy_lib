@@ -11,13 +11,17 @@ import Mix from "../Mix/Mix";
  * @return {Code}
 */
 
+type Data = {
+    [key:string]:object
+};
+
 export default abstract class Code {
-    data: object;
+    data: Data;
     linkingPoints: LinkingPoints
     readonly addLinkingPoint: (name : string) => Mix;
     readonly addDefaultLinkingPoints: (name : [string]) => void;
 
-    constructor(data : object, mix : Mix) {
+    constructor(data : Data, mix : Mix) {
         this.data = data;
         this.linkingPoints = mix.linkingPoints;
         this.addLinkingPoint = mix.addLinkingPoint.bind(mix);
