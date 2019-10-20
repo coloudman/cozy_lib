@@ -27,6 +27,10 @@ export default class Area {
         this.mixes.push(mix);
         return mix;
     }
+    removeMix(mix : Mix) {
+        const mixIndex = this.mixes.indexOf(mix);
+        this.mixes.splice(mixIndex, 1);
+    }
 
     getController(controllerName : string) : Controller[] {
         const controllers : Controller[] = [];

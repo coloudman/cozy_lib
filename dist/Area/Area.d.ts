@@ -10,6 +10,7 @@ export default class Area {
     controllerNames: string[];
     constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders);
     addMix(mixData: MixData): Mix;
+    removeMix(mix: Mix): void;
     getController(controllerName: string): Controller[];
     addController(controllerName: string): void;
 }

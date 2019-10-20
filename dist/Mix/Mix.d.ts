@@ -22,7 +22,7 @@ export default class Mix {
     };
     constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixData: MixData);
     loadMix(mixData: MixData): Mix;
-    addDefaultLinkingPoints(names: [string]): void;
+    addDefaultLinkingPoints(names: string[]): void;
     addLinkingPoint(name: string): void;
     removeLinkingPoint(name: string): void;
     link(name: string, mixData: MixData): void;
