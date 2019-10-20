@@ -12,11 +12,15 @@ export default class Area {
     mixes: Mix[]
     controllerNames: string[]
     
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders) {
+    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : MixData[]) {
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
         this.mixes = [];
         this.controllerNames = [];
+
+        mixDatas.forEach(mixData => {
+            this.addMix(mixData);
+        });
     }
 
     addMix(mixData : MixData) : Mix {
