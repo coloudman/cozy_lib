@@ -60,7 +60,7 @@ export default class Mix {
 
     // 연결점 관련
 
-    addDefaultLinkingPoints(names : [ string ]) {
+    addDefaultLinkingPoints(names : string[]) {
         names.forEach(name => {
             if(!this.linkingPoints[name]) {
                 this.addLinkingPoint(name);

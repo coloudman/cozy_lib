@@ -19,7 +19,7 @@ export default abstract class Code {
     data: Data;
     linkingPoints: LinkingPoints
     readonly addLinkingPoint: (name : string) => Mix;
-    readonly addDefaultLinkingPoints: (name : [string]) => void;
+    readonly addDefaultLinkingPoints: (name : string[]) => void;
 
     constructor(data : Data, mix : Mix) {
         this.data = data;
