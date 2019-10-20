@@ -12,7 +12,7 @@ module.exports = {
     },
     output:{
         library: 'COZY_LIB',
-        libraryTarget: 'umd',
+        libraryTarget: 'commonjs',
         filename: 'index.js',
         path: path.resolve(__dirname, "dist")
     },

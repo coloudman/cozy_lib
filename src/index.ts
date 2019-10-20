@@ -14,6 +14,13 @@ import CodeLoader from "./Loader/CodeLoader";
 
 import Mix from "./Mix/Mix";
 import Area from "./Area/Area";
+import MixData from "./struct/MixData";
+import ControllerLoader from "./Loader/ControllerLoader";
+import LinkingPointsData from "./struct/LinkingPointsData";
+import ControllerLoaders from "./structClass/ControllerLoaders";
+import LinkingPoint from "./structClass/LinkingPoint";
+import LinkingPoints from "./structClass/LinkingPoints";
+import LinkedControllers from "./structClass/LinkedControllers";
 
 export {
     Package,
@@ -23,12 +30,22 @@ export {
     Code, 
     Controller,
 
-    CodeData,
-
     Loader,
     CodeLoader,
+    ControllerLoader,
 
     Mix,
 
-    Area
+    Area,
+
+    //STRUCTs
+    CodeData,
+    MixData,
+    LinkingPointsData,
+
+    ControllerLoaders,
+    LinkingPoint,
+    LinkingPoints,
+    LinkedControllers
+
 };
