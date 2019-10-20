@@ -6,11 +6,15 @@ import Mix from "../Mix/Mix";
  * @param {Object} codeData
  * @return {Code}
 */
+declare type Data = {
+    [key: string]: any;
+};
 export default abstract class Code {
-    data: object;
+    data: Data;
     linkingPoints: LinkingPoints;
     readonly addLinkingPoint: (name: string) => Mix;
     readonly addDefaultLinkingPoints: (name: [string]) => void;
-    constructor(data: object, mix: Mix);
+    constructor(data: Data, mix: Mix);
     abstract init(): any;
 }
+export {};

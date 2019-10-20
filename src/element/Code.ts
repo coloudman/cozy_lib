@@ -12,7 +12,7 @@ import Mix from "../Mix/Mix";
 */
 
 type Data = {
-    [key:string]:object
+    [key:string]:any
 };
 
 export default abstract class Code {
