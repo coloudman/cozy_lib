@@ -20,7 +20,6 @@ const codeLoader = new CodeLoader(codePackages);
 const compilerLoader = new ControllerLoader(compilerPackages);
 
 
-
 //코드 데이터. 순수 JSON임
 const mixData = {
     codeData:{
@@ -44,10 +43,12 @@ const mixData = {
     }
 };
 
+const mixDatas = [];
+
 //코드 클래스들을 엮어줌
 const area = new Area(codeLoader, {
     compiler:compilerLoader
-},[]);
+}, mixDatas);
 area.addController("compiler");
 
 const mix = area.addMix(mixData);
@@ -63,7 +64,7 @@ mix.link("second",{
     linkingPointsData:{}
 });
 
-mix.linkingPoints.second.linkedMix.link("first",{
+mix.linkingPoints.second.linked.link("first",{
     codeData:{
         packageId:"MATH",
         packageVersion:"1",
@@ -75,7 +76,7 @@ mix.linkingPoints.second.linkedMix.link("first",{
     linkingPointsData:{}
 });
 
-mix.linkingPoints.second.linkedMix.link("second",{
+mix.linkingPoints.second.linked.link("second",{
     codeData:{
         packageId:"MATH",
         packageVersion:"1",
@@ -90,4 +91,4 @@ mix.linkingPoints.second.linkedMix.link("second",{
 //컴파일 최고!
 console.log(area.getController("compiler")[0].compile());
 
-console.log(JSON.stringify(mixData, null, 2));
+console.log(JSON.stringify(mixDatas, null, 2));

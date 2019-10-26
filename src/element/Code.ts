@@ -16,16 +16,16 @@ type Data = {
 };
 
 export default abstract class Code {
-    data: Data;
+    data: Data
     linkingPoints: LinkingPoints
     readonly addLinkingPoint: (name : string) => Mix;
     readonly addDefaultLinkingPoints: (name : string[]) => void;
 
     constructor(data : Data, mix : Mix) {
-        this.data = data;
+        this.data = data; //LINK(POINTER) data !//JSON.parse(JSON.stringify(data)); //deep JSON copy
         this.linkingPoints = mix.linkingPoints;
         this.addLinkingPoint = mix.addLinkingPoint.bind(mix);
-        this.addDefaultLinkingPoints = mix.addDefaultLinkingPoints;
+        this.addDefaultLinkingPoints = mix.addDefaultLinkingPoints.bind(mix);
         
         this.init();
     }

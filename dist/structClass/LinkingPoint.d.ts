@@ -1,5 +1,5 @@
 import EventEmitter from "wolfy87-eventemitter";
-import Mix from "../Mix/Mix";
+import Mix from "@src/Mix/Mix";
 declare interface LinkingPoint {
     on(event: "link" | "unlink", listener: (code: Mix) => void): this;
     on(event: string, listener: Function): this;
@@ -9,8 +9,8 @@ declare interface LinkingPoint {
     emit(event: RegExp, ...args: any): this;
 }
 declare class LinkingPoint extends EventEmitter {
-    linkedMix: Mix;
-    constructor(linkedMix?: Mix);
+    linked: Mix;
+    constructor(linked?: Mix);
     link(code: Mix): void;
     unlink(): void;
 }

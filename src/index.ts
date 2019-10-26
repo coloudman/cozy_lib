@@ -9,7 +9,7 @@ import Controller from "./Element/Controller";
 
 import CodeData from "./struct/CodeData";
 
-import Loader from "./Loader/Loader";
+import Loader from "./Loader/ElementLoader";
 import CodeLoader from "./Loader/CodeLoader";
 
 import Mix from "./Mix/Mix";

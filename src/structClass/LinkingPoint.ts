@@ -41,7 +41,8 @@ export default LinkingPoint;
 
 
 import EventEmitter from "wolfy87-eventemitter";
-import Mix from "../Mix/Mix";
+import Code from "@src/Element/Code";
+import Mix from "@src/Mix/Mix";
 
 declare interface LinkingPoint {
     on(event : "link" | "unlink", listener : (code : Mix) => void) : this
@@ -54,21 +55,21 @@ declare interface LinkingPoint {
 }
 
 class LinkingPoint extends EventEmitter {
-    linkedMix : Mix
+    linked : Mix
 
-    constructor(linkedMix : Mix = undefined) {
+    constructor(linked : Mix = undefined) {
         super();
-        this.linkedMix = linkedMix;
+        this.linked = linked;
     }
 
     link(code : Mix) {
         this.emit("link", code);
-        this.linkedMix = code;
+        this.linked = code;
     }
 
     unlink() {
-        this.emit("unlink", this.linkedMix)
-        this.linkedMix = undefined;
+        this.emit("unlink", this.linked)
+        this.linked = undefined;
     }
 }
 
