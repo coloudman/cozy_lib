@@ -4,7 +4,16 @@ import Mix from "../Mix/Mix";
 import Controller from "@src/Element/Controller";
 import RootMixData from "@src/struct/RootMixData";
 import RootMix from "@src/structClass/RootMix";
-export default class Area {
+import EventEmitter from "wolfy87-eventemitter";
+declare interface Area {
+    on(event: "rootMixAdded" | "rootMixRemoved", listener: (rootMix: RootMix) => void): this;
+    on(event: string, listener: Function): this;
+    on(event: RegExp, listener: Function): this;
+    emit(event: "rootMixAdded" | "rootMixRemoved", rootMix: RootMix): this;
+    emit(event: string, ...args: any): this;
+    emit(event: RegExp, ...args: any): this;
+}
+declare class Area extends EventEmitter {
     codeLoader: CodeLoader;
     controllerLoaders: ControllerLoaders;
     rootMixes: RootMix[];
@@ -16,3 +25,4 @@ export default class Area {
     getController(controllerName: string): Controller[];
     addController(controllerName: string): void;
 }
+export default Area;

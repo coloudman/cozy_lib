@@ -6,9 +6,20 @@ import Controller from "@src/Element/Controller";
 import RootMixData from "@src/struct/RootMixData";
 import RootMix from "@src/structClass/RootMix";
 
+import EventEmitter from "wolfy87-eventemitter";
 
 
-export default class Area {
+declare interface Area {
+    on(event : "rootMixAdded" | "rootMixRemoved", listener : (rootMix : RootMix) => void) : this
+    on(event: string, listener: Function): this
+    on(event: RegExp, listener: Function): this
+
+    emit(event : "rootMixAdded" | "rootMixRemoved", rootMix : RootMix) : this
+    emit(event : string, ...args : any): this
+    emit(event : RegExp, ...args : any): this
+}
+
+class Area extends EventEmitter {
     /*
     같은 Loader들을 가지는 Mix들의 집합 존재 공간
     */
@@ -20,6 +31,8 @@ export default class Area {
     rootMixDatas: RootMixData[];
     
     constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : RootMixData[]) {
+        super();
+
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
         this.rootMixes = [];
@@ -37,12 +50,16 @@ export default class Area {
         this.controllerNames.forEach(controllerName => {
             mix.addController(controllerName);
         });
-        this.rootMixes.push({
+        const rootMix = {
             mix:mix,
             data:rootMixData.data
-        });
+        };
+        this.rootMixes.push(rootMix);
         //Data
         this.rootMixDatas.push(rootMixData);
+
+        //event
+        this.emit("rootMixAdded", rootMix);
         return mix;
     }
     removeRootMix(rootMix : RootMix) {
@@ -50,6 +67,9 @@ export default class Area {
         this.rootMixes.splice(mixIndex, 1);
         //Data
         this.rootMixDatas.splice(mixIndex, 1);
+
+        //event
+        this.emit("rootMixRemoved", rootMix);
     }
 
     getController(controllerName : string) : Controller[] {
@@ -67,3 +87,5 @@ export default class Area {
         this.controllerNames.push(controllerName);
     }
 }
+
+export default Area;
