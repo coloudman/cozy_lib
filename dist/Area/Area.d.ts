@@ -1,27 +1,26 @@
 import CodeLoader from "@src/Loader/CodeLoader";
 import ControllerLoaders from "@src/structClass/ControllerLoaders";
+import MixData from "@src/struct/MixData";
 import Mix from "../Mix/Mix";
 import Controller from "@src/Element/Controller";
-import RootMixData from "@src/struct/RootMixData";
-import RootMix from "@src/structClass/RootMix";
 import EventEmitter from "wolfy87-eventemitter";
 declare interface Area {
-    on(event: "rootMixAdded" | "rootMixRemoved", listener: (rootMix: RootMix) => void): this;
+    on(event: "mixAdded" | "mixRemoved", listener: (mix: Mix) => void): this;
     on(event: string, listener: Function): this;
     on(event: RegExp, listener: Function): this;
-    emit(event: "rootMixAdded" | "rootMixRemoved", rootMix: RootMix): this;
+    emit(event: "mixAdded" | "mixRemoved", mix: Mix): this;
     emit(event: string, ...args: any): this;
     emit(event: RegExp, ...args: any): this;
 }
 declare class Area extends EventEmitter {
     codeLoader: CodeLoader;
     controllerLoaders: ControllerLoaders;
-    rootMixes: RootMix[];
+    mixes: Mix[];
     controllerNames: string[];
-    rootMixDatas: RootMixData[];
-    constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixDatas: RootMixData[]);
-    addRootMix(rootMixData: RootMixData): Mix;
-    removeRootMix(rootMix: RootMix): void;
+    mixDatas: MixData[];
+    constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixDatas: MixData[]);
+    addMix(mixData: MixData): Mix;
+    removeMix(mix: Mix): void;
     getController(controllerName: string): Controller[];
     addController(controllerName: string): void;
 }

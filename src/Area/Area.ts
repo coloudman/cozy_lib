@@ -3,18 +3,16 @@ import ControllerLoaders from "@src/structClass/ControllerLoaders";
 import MixData from "@src/struct/MixData";
 import Mix from "../Mix/Mix";
 import Controller from "@src/Element/Controller";
-import RootMixData from "@src/struct/RootMixData";
-import RootMix from "@src/structClass/RootMix";
 
 import EventEmitter from "wolfy87-eventemitter";
 
 
 declare interface Area {
-    on(event : "rootMixAdded" | "rootMixRemoved", listener : (rootMix : RootMix) => void) : this
+    on(event : "mixAdded" | "mixRemoved", listener : (mix : Mix) => void) : this
     on(event: string, listener: Function): this
     on(event: RegExp, listener: Function): this
 
-    emit(event : "rootMixAdded" | "rootMixRemoved", rootMix : RootMix) : this
+    emit(event : "mixAdded" | "mixRemoved", mix : Mix) : this
     emit(event : string, ...args : any): this
     emit(event : RegExp, ...args : any): this
 }
@@ -26,63 +24,59 @@ class Area extends EventEmitter {
 
     codeLoader: CodeLoader;
     controllerLoaders: ControllerLoaders;
-    rootMixes: RootMix[];
+    mixes: Mix[];
     controllerNames: string[];
-    rootMixDatas: RootMixData[];
+    mixDatas: MixData[];
     
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : RootMixData[]) {
+    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : MixData[]) {
         super();
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
-        this.rootMixes = [];
+        this.mixes = [];
         this.controllerNames = [];
 
-        this.rootMixDatas = mixDatas;
+        this.mixDatas = mixDatas;
 
-        mixDatas.forEach(rootMixData => {
-            this.addRootMix(rootMixData);
+        mixDatas.forEach(mixData => {
+            this.addMix(mixData);
         });
     }
 
-    addRootMix(rootMixData : RootMixData) : Mix {
-        const mix = new Mix(this.codeLoader, this.controllerLoaders, rootMixData.mixData);
+    addMix(mixData : MixData) : Mix {
+        const mix = new Mix(this.codeLoader, this.controllerLoaders, mixData);
         this.controllerNames.forEach(controllerName => {
             mix.addController(controllerName);
         });
-        const rootMix = {
-            mix:mix,
-            data:rootMixData.data
-        };
-        this.rootMixes.push(rootMix);
+        this.mixes.push(mix);
         //Data
-        this.rootMixDatas.push(rootMixData);
+        this.mixDatas.push(mixData);
 
         //event
-        this.emit("rootMixAdded", rootMix);
+        this.emit("mixAdded", mix);
         return mix;
     }
-    removeRootMix(rootMix : RootMix) {
-        const mixIndex = this.rootMixes.indexOf(rootMix);
-        this.rootMixes.splice(mixIndex, 1);
+    removeMix(mix : Mix) {
+        const mixIndex = this.mixes.indexOf(mix);
+        this.mixes.splice(mixIndex, 1);
         //Data
-        this.rootMixDatas.splice(mixIndex, 1);
+        this.mixDatas.splice(mixIndex, 1);
 
         //event
-        this.emit("rootMixRemoved", rootMix);
+        this.emit("mixRemoved", mix);
     }
 
     getController(controllerName : string) : Controller[] {
         const controllers : Controller[] = [];
-        this.rootMixes.forEach(rootMix => {
-           controllers.push(rootMix.mix.controllers[controllerName]);
+        this.mixes.forEach(mix => {
+           controllers.push(mix.controllers[controllerName]);
         });
         return controllers;
     }
 
     addController(controllerName : string) {
-        this.rootMixes.forEach(rootMix => {
-            rootMix.mix.addController(controllerName);
+        this.mixes.forEach(mix => {
+            mix.addController(controllerName);
         });
         this.controllerNames.push(controllerName);
     }
