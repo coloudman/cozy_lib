@@ -3,6 +3,8 @@ import ControllerLoaders from "@src/structClass/ControllerLoaders";
 import MixData from "@src/struct/MixData";
 import Mix from "../Mix/Mix";
 import Controller from "@src/Element/Controller";
+import RootMixData from "@src/struct/RootMixData";
+import RootMix from "@src/structClass/RootMix";
 
 
 
@@ -13,51 +15,54 @@ export default class Area {
 
     codeLoader: CodeLoader;
     controllerLoaders: ControllerLoaders;
-    mixes: Mix[];
+    rootMixes: RootMix[];
     controllerNames: string[];
-    mixDatas: MixData[];
+    rootMixDatas: RootMixData[];
     
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : MixData[]) {
+    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : RootMixData[]) {
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
-        this.mixes = [];
+        this.rootMixes = [];
         this.controllerNames = [];
 
-        this.mixDatas = mixDatas;
+        this.rootMixDatas = mixDatas;
 
-        mixDatas.forEach(mixData => {
-            this.addMix(mixData);
+        mixDatas.forEach(rootMixData => {
+            this.addRootMix(rootMixData);
         });
     }
 
-    addMix(mixData : MixData) : Mix {
-        const mix = new Mix(this.codeLoader, this.controllerLoaders, mixData);
+    addRootMix(rootMixData : RootMixData) : Mix {
+        const mix = new Mix(this.codeLoader, this.controllerLoaders, rootMixData.mixData);
         this.controllerNames.forEach(controllerName => {
             mix.addController(controllerName);
         });
-        this.mixes.push(mix);
+        this.rootMixes.push({
+            mix:mix,
+            data:rootMixData.data
+        });
         //Data
-        this.mixDatas.push(mixData);
+        this.rootMixDatas.push(rootMixData);
         return mix;
     }
-    removeMix(mix : Mix) {
-        const mixIndex = this.mixes.indexOf(mix);
-        this.mixes.splice(mixIndex, 1);
+    removeRootMix(rootMix : RootMix) {
+        const mixIndex = this.rootMixes.indexOf(rootMix);
+        this.rootMixes.splice(mixIndex, 1);
         //Data
-        this.mixDatas.splice(mixIndex, 1);
+        this.rootMixDatas.splice(mixIndex, 1);
     }
 
     getController(controllerName : string) : Controller[] {
         const controllers : Controller[] = [];
-        this.mixes.forEach(mix => {
-           controllers.push(mix.controllers[controllerName]);
+        this.rootMixes.forEach(rootMix => {
+           controllers.push(rootMix.mix.controllers[controllerName]);
         });
         return controllers;
     }
 
     addController(controllerName : string) {
-        this.mixes.forEach(mix => {
-            mix.addController(controllerName);
+        this.rootMixes.forEach(rootMix => {
+            rootMix.mix.addController(controllerName);
         });
         this.controllerNames.push(controllerName);
     }
