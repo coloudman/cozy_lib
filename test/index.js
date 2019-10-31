@@ -51,9 +51,7 @@ const area = new Area(codeLoader, {
 }, mixDatas);
 area.addController("compiler");
 
-const mix = area.addRootMix({
-    mixData
-});
+const mix = area.addMix(mixData);
 
 //링크 해봄
 mix.link("second",{

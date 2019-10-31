@@ -5,7 +5,6 @@ console.log(Controller);
 
 class Number extends Controller {
     init() {
-        
     }
     compile() {
         return this.code.getNumber()+"";
@@ -14,7 +13,9 @@ class Number extends Controller {
 
 class Add extends Controller {
     init() {
-
+        this.code.linkingPoints.second.on("link",()=>{
+            console.log(this.linkedControllers.second);
+        });
     }
     compile() {
         return `(${this.linkedControllers.first.compile()}) + (${this.linkedControllers.second.compile()})`;

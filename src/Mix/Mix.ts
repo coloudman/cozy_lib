@@ -88,13 +88,15 @@ export default class Mix {
             linkingPointsData:mixData.linkingPointsData
         };
 
-        //Mix 로딩해서 등록
-        this.linkingPoints[name].link(this.loadMix(mixData));
+        const mix = this.loadMix(mixData);
 
         //기존에 있던 컨트롤러-링킹포인트 접근 오브젝트들에 이 링킹포인트 추가
         Object.entries(this.linkedControllerses).forEach(([controllerType, controllers]) => {
-            controllers[name] = this.linkingPoints[name].linked.addController(controllerType);
+            controllers[name] = mix.addController(controllerType);
         });
+
+        //Mix 로딩해서 등록, 이때 추가적인 리스너들이 호출됨
+        this.linkingPoints[name].link(mix);
     }
     unlink(name : string) {
         delete this.linkingPoints[name];
