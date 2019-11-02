@@ -1,5 +1,5 @@
 
-const { CodeLoader, ControllerLoader, Area } = require("../dist/index");
+const { CodeLoader, ControllerLoader, Area, Context } = require("../dist/index");
 const testPackage = require("./packages/MATHCode");
 const testCompilerPackage = require("./packages/MATHCompilerJS");
 
@@ -38,17 +38,40 @@ const mixData = {
                     number:8
                 }
             },
-            linkingPointsData:{}
+            linkingPointsData:{},
+            controllerDatas:{}
         }
-    }
+    },
+    controllerDatas:{}
 };
 
 const mixDatas = [];
 
+class myCompilerContext extends Context {
+    constructor(data) {
+        super(data);
+        if(this.data.space === undefined) {
+            this.data.space = true;
+        }
+    }
+    set space(space) {
+        this.data.space = space;
+        this.emit("spaceChanged", space);
+    }
+    get space() {
+        return this.data.space;
+    }
+}
+
+const contextData = {};
+const context = new myCompilerContext(contextData);
+
 //코드 클래스들을 엮어줌
 const area = new Area(codeLoader, {
     compiler:compilerLoader
-}, mixDatas);
+}, mixDatas, {
+    compiler:context
+});
 area.addController("compiler");
 
 const mix = area.addMix(mixData);
@@ -61,7 +84,8 @@ mix.link("second",{
         id:"Subtract",
         data:{}
     },
-    linkingPointsData:{}
+    linkingPointsData:{},
+    controllerDatas:{}
 });
 
 mix.linkingPoints.second.linked.link("first",{
@@ -73,7 +97,8 @@ mix.linkingPoints.second.linked.link("first",{
             number:80
         }
     },
-    linkingPointsData:{}
+    linkingPointsData:{},
+    controllerDatas:{}
 });
 
 mix.linkingPoints.second.linked.link("second",{
@@ -85,10 +110,17 @@ mix.linkingPoints.second.linked.link("second",{
             number:40
         }
     },
-    linkingPointsData:{}
-})
+    linkingPointsData:{},
+    controllerDatas:{}
+});
 
 //컴파일 최고!
-console.log(area.getController("compiler")[0].compile());
-
+console.log("_________________");
 console.log(JSON.stringify(mixDatas, null, 2));
+console.log("_Yes spaces________________");
+console.log(area.getController("compiler")[0].compile());
+console.log(JSON.stringify(contextData, null, 2));
+console.log("_No spaces________________");
+context.space = false;
+console.log(area.getController("compiler")[0].compile());
+console.log(JSON.stringify(contextData, null, 2));

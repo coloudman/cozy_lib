@@ -8,6 +8,7 @@ import LinkingPoint from "../structClass/LinkingPoint";
 import MixData from "../struct/MixData";
 import LinkedControllers from "@src/structClass/LinkedControllers";
 import ControllerLoaders from "@src/structClass/ControllerLoaders";
+import Context from "@src/structClass/Context";
 
 type Controllers = {
     [name : string]: Controller
@@ -25,6 +26,9 @@ export default class Mix {
     controllerLoaders: ControllerLoaders;
     codeLoader: CodeLoader;
     mixData: MixData;
+    contexts: {
+        [controllerName:string]:Context
+    };
 
     code: Code;
 
@@ -39,11 +43,12 @@ export default class Mix {
         [controllerName: string] : LinkedControllers
     }
 
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixData : MixData) {
+    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixData : MixData, contexts : {[controllerName:string]:Context}) {
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
         this.mixData = mixData;
+        this.contexts = contexts;
 
         this.linkingPoints = {};
 
@@ -62,7 +67,7 @@ export default class Mix {
     }
 
     loadMix(mixData : MixData) {
-        return new Mix(this.codeLoader, this.controllerLoaders, mixData)
+        return new Mix(this.codeLoader, this.controllerLoaders, mixData, this.contexts);
     }
 
     // 연결점 관련
@@ -85,7 +90,8 @@ export default class Mix {
         //링킹포인트데이터 등록
         this.mixData.linkingPointsData[name] = {
             codeData:mixData.codeData,
-            linkingPointsData:mixData.linkingPointsData
+            linkingPointsData:mixData.linkingPointsData,
+            controllerDatas:mixData.controllerDatas
         };
 
         const mix = this.loadMix(mixData);
@@ -114,22 +120,36 @@ export default class Mix {
 
     // 컨트롤러 연결
     addController(name : string): Controller {
+        //컨트롤러를 위한 하위 컨트롤러 연결점(linkedControllerses) 제작
         const linkedControllers = {} as LinkedControllers;
         this.runOnExistLinkingPoints((linkingPointName, linkedMix) => {
             linkedControllers[linkingPointName] = linkedMix.addController(name);
         });
         this.linkedControllerses[name] = linkedControllers;
 
-        const controller = this.controllerLoaders[name].load(this.code, this.mixData.codeData, linkedControllers);
+        //컨트롤러의 데이터 없을시 제작
+        const controllerData = this.mixData.controllerDatas[name] || (this.mixData.controllerDatas[name] = {});
+        const controller = this.controllerLoaders[name].load(this.code, this.mixData.codeData, linkedControllers, controllerData, this.contexts[name]);
 
         this.controllers[name] = controller;
         return controller;
     }
-    removeController(name : string) {
+    removeController(name : string, withData = false) {
+        //하위 Mix도 컨트롤러 제거
         this.runOnExistLinkingPoints((linkingPointName, linkedMix) => {
             linkedMix.removeController(name);
         });
+
+        //name 타입의 컨트롤러를 위한 하위 컨트롤러 저장 오브젝트 제거
         delete this.linkedControllerses[name];
+
+        //정지 요청
+        this.controllers[name].stop();
         delete this.controllers[name];
+
+        //컨트롤러 데이터도 제거를 원할 시
+        if(withData) {
+            delete this.mixData.controllerDatas[name];
+        }
     }
 }

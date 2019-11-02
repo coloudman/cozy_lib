@@ -5,6 +5,7 @@ import Mix from "../Mix/Mix";
 import Controller from "@src/Element/Controller";
 
 import EventEmitter from "wolfy87-eventemitter";
+import Context from "@src/structClass/Context";
 
 
 declare interface Area {
@@ -27,12 +28,15 @@ class Area extends EventEmitter {
     mixes: Mix[];
     controllerNames: string[];
     mixDatas: MixData[];
+    contexts: { [controllerName: string]: Context; };
     
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : MixData[]) {
+    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : MixData[], contexts : {[controllerName:string]:Context}) {
         super();
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
+        this.contexts = contexts;
+        
         this.mixes = [];
         this.controllerNames = [];
 
@@ -44,7 +48,7 @@ class Area extends EventEmitter {
     }
 
     addMix(mixData : MixData) : Mix {
-        const mix = new Mix(this.codeLoader, this.controllerLoaders, mixData);
+        const mix = new Mix(this.codeLoader, this.controllerLoaders, mixData, this.contexts);
         this.controllerNames.forEach(controllerName => {
             mix.addController(controllerName);
         });

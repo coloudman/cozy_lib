@@ -4,6 +4,7 @@ import MixData from "@src/struct/MixData";
 import Mix from "../Mix/Mix";
 import Controller from "@src/Element/Controller";
 import EventEmitter from "wolfy87-eventemitter";
+import Context from "@src/structClass/Context";
 declare interface Area {
     on(event: "mixAdded" | "mixRemoved", listener: (mix: Mix) => void): this;
     on(event: string, listener: Function): this;
@@ -18,7 +19,12 @@ declare class Area extends EventEmitter {
     mixes: Mix[];
     controllerNames: string[];
     mixDatas: MixData[];
-    constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixDatas: MixData[]);
+    contexts: {
+        [controllerName: string]: Context;
+    };
+    constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, mixDatas: MixData[], contexts: {
+        [controllerName: string]: Context;
+    });
     addMix(mixData: MixData): Mix;
     removeMix(mix: Mix): void;
     getController(controllerName: string): Controller[];

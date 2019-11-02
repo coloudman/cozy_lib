@@ -21,6 +21,7 @@ import ControllerLoaders from "./structClass/ControllerLoaders";
 import LinkingPoint from "./structClass/LinkingPoint";
 import LinkingPoints from "./structClass/LinkingPoints";
 import LinkedControllers from "./structClass/LinkedControllers";
+import Context from "./structClass/Context";
 
 export {
     Package,
@@ -46,6 +47,6 @@ export {
     ControllerLoaders,
     LinkingPoint,
     LinkingPoints,
-    LinkedControllers
-
+    LinkedControllers,
+    Context
 };

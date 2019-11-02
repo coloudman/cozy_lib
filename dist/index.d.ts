@@ -15,4 +15,5 @@ import ControllerLoaders from "./structClass/ControllerLoaders";
 import LinkingPoint from "./structClass/LinkingPoint";
 import LinkingPoints from "./structClass/LinkingPoints";
 import LinkedControllers from "./structClass/LinkedControllers";
-export { Package, CodePackage, ControllerPackage, Code, Controller, Loader, CodeLoader, ControllerLoader, Mix, Area, CodeData, MixData, LinkingPointsData, ControllerLoaders, LinkingPoint, LinkingPoints, LinkedControllers };
+import Context from "./structClass/Context";
+export { Package, CodePackage, ControllerPackage, Code, Controller, Loader, CodeLoader, ControllerLoader, Mix, Area, CodeData, MixData, LinkingPointsData, ControllerLoaders, LinkingPoint, LinkingPoints, LinkedControllers, Context };

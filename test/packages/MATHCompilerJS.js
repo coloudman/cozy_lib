@@ -1,7 +1,6 @@
 
 
 const { Controller } = require("../../dist/index");
-console.log(Controller);
 
 class Number extends Controller {
     init() {
@@ -18,7 +17,8 @@ class Add extends Controller {
         });
     }
     compile() {
-        return `(${this.linkedControllers.first.compile()}) + (${this.linkedControllers.second.compile()})`;
+        const space = this.context.space ? " " : "";
+        return `(${this.linkedControllers.first.compile()})${space}+${space}(${this.linkedControllers.second.compile()})`;
     }
 }
 
@@ -27,7 +27,8 @@ class Subtract extends Controller {
 
     }
     compile() {
-        return `(${this.linkedControllers.first.compile()}) - (${this.linkedControllers.second.compile()})`;
+        const space = this.context.space ? " " : "";
+        return `(${this.linkedControllers.first.compile()})${space}-${space}(${this.linkedControllers.second.compile()})`;
     }
 }
 
