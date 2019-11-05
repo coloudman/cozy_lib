@@ -1,7 +1,7 @@
 import CodeLoader from "@src/Loader/CodeLoader";
 import ControllerLoaders from "@src/structClass/ControllerLoaders";
-import MixData from "@src/struct/MixData";
-import Mix from "../Mix/Mix";
+import CodeData from "@src/struct/CodeData";
+import Code from "../Element/Code";
 import Controller from "@src/Element/Controller";
 
 import EventEmitter from "wolfy87-eventemitter";
@@ -9,11 +9,11 @@ import Context from "@src/structClass/Context";
 
 
 declare interface Area {
-    on(event : "mixAdded" | "mixRemoved", listener : (mix : Mix) => void) : this
+    on(event : "codeAdded" | "codeRemoved", listener : (code : Code) => void) : this
     on(event: string, listener: Function): this
     on(event: RegExp, listener: Function): this
 
-    emit(event : "mixAdded" | "mixRemoved", mix : Mix) : this
+    emit(event : "codeAdded" | "codeRemoved", code : Code) : this
     emit(event : string, ...args : any): this
     emit(event : RegExp, ...args : any): this
 }
@@ -25,62 +25,62 @@ class Area extends EventEmitter {
 
     codeLoader: CodeLoader;
     controllerLoaders: ControllerLoaders;
-    mixes: Mix[];
+    codes: Code[];
     controllerNames: string[];
-    mixDatas: MixData[];
+    codeDatas: CodeData[];
     contexts: { [controllerName: string]: Context; };
     
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, mixDatas : MixData[], contexts : {[controllerName:string]:Context}) {
+    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, codeDatas : CodeData[], contexts : {[controllerName:string]:Context}) {
         super();
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
         this.contexts = contexts;
         
-        this.mixes = [];
+        this.codes = [];
         this.controllerNames = [];
 
-        this.mixDatas = mixDatas;
+        this.codeDatas = codeDatas;
 
-        mixDatas.forEach(mixData => {
-            this.addMix(mixData);
+        codeDatas.forEach(codeData => {
+            this.addCode(codeData);
         });
     }
 
-    addMix(mixData : MixData) : Mix {
-        const mix = new Mix(this.codeLoader, this.controllerLoaders, mixData, this.contexts);
+    addCode(codeData : CodeData) : Code {
+        const code = this.codeLoader.load(this.controllerLoaders, codeData, this.contexts);
         this.controllerNames.forEach(controllerName => {
-            mix.addController(controllerName);
+            code.addController(controllerName);
         });
-        this.mixes.push(mix);
+        this.codes.push(code);
         //Data
-        this.mixDatas.push(mixData);
+        this.codeDatas.push(codeData);
 
         //event
-        this.emit("mixAdded", mix);
-        return mix;
+        this.emit("codeAdded", code);
+        return code;
     }
-    removeMix(mix : Mix) {
-        const mixIndex = this.mixes.indexOf(mix);
-        this.mixes.splice(mixIndex, 1);
+    removeCode(code : Code) {
+        const codeIndex = this.codes.indexOf(code);
+        this.codes.splice(codeIndex, 1);
         //Data
-        this.mixDatas.splice(mixIndex, 1);
+        this.codeDatas.splice(codeIndex, 1);
 
         //event
-        this.emit("mixRemoved", mix);
+        this.emit("codeRemoved", code);
     }
 
     getController(controllerName : string) : Controller[] {
         const controllers : Controller[] = [];
-        this.mixes.forEach(mix => {
-           controllers.push(mix.controllers[controllerName]);
+        this.codes.forEach(code => {
+           controllers.push(code.controllers[controllerName]);
         });
         return controllers;
     }
 
     addController(controllerName : string) {
-        this.mixes.forEach(mix => {
-            mix.addController(controllerName);
+        this.codes.forEach(code => {
+            code.addController(controllerName);
         });
         this.controllerNames.push(controllerName);
     }

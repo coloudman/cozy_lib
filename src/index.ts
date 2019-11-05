@@ -8,22 +8,28 @@ import Code from "./Element/Code";
 import Controller from "./Element/Controller";
 
 import CodeData from "./struct/CodeData";
+import LinkingPointsData from "./struct/LinkingPointsData";
+import Data from "./struct/Data";
+import ID from "./struct/ID";
 
 import Loader from "./Loader/ElementLoader";
 import CodeLoader from "./Loader/CodeLoader";
-
-import Mix from "./Mix/Mix";
-import Area from "./Area/Area";
-import MixData from "./struct/MixData";
 import ControllerLoader from "./Loader/ControllerLoader";
-import LinkingPointsData from "./struct/LinkingPointsData";
 import ControllerLoaders from "./structClass/ControllerLoaders";
-import LinkingPoint from "./structClass/LinkingPoint";
-import LinkingPoints from "./structClass/LinkingPoints";
-import LinkedControllers from "./structClass/LinkedControllers";
+
+import LinkingPoint from "./LinkingPoint/LinkingPoint";
+import LinkingPoints from "./LinkingPoint/LinkingPoints";
+
 import Context from "./structClass/Context";
 
+import Area from "./Area/Area";
+import LinkingPointsManager from "./LinkingPoint/LinkingPointsManager";
+
+
 export {
+
+    Area,
+
     Package,
     CodePackage,
     ControllerPackage,
@@ -34,19 +40,16 @@ export {
     Loader,
     CodeLoader,
     ControllerLoader,
-
-    Mix,
-
-    Area,
-
-    //STRUCTs
-    CodeData,
-    MixData,
-    LinkingPointsData,
-
     ControllerLoaders,
+
     LinkingPoint,
     LinkingPoints,
-    LinkedControllers,
+    LinkingPointsManager,
+
+    CodeData,
+    LinkingPointsData,
+    ID,
+    Data,
+
     Context
 };

@@ -1,6 +1,7 @@
 
-import MixData from "./MixData";
+
+import CodeData from "./CodeData";
 
 export default interface LinkingPointsData {
-    [name : string]: MixData
+    [name : string]: CodeData
 }

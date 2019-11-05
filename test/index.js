@@ -21,31 +21,31 @@ const compilerLoader = new ControllerLoader(compilerPackages);
 
 
 //코드 데이터. 순수 JSON임
-const mixData = {
-    codeData:{
+const codeData = {
+    iD:{
         packageId:"MATH",
         packageVersion:"1",
-        id:"Add",
-        data:{}
+        id:"Add"
     },
     linkingPointsData:{
         first:{
-            codeData:{
+            iD:{
                 packageId:"MATH",
                 packageVersion:"1",
-                id:"Number",
-                data:{
-                    number:8
-                }
+                id:"Number"
+            },
+            data:{
+                number:8
             },
             linkingPointsData:{},
             controllerDatas:{}
         }
     },
+    data:{},
     controllerDatas:{}
 };
 
-const mixDatas = [];
+const codeDatas = [];
 
 class myCompilerContext extends Context {
     constructor(data) {
@@ -69,55 +69,107 @@ const context = new myCompilerContext(contextData);
 //코드 클래스들을 엮어줌
 const area = new Area(codeLoader, {
     compiler:compilerLoader
-}, mixDatas, {
+}, codeDatas, {
     compiler:context
 });
 area.addController("compiler");
 
-const mix = area.addMix(mixData);
+const code = area.addCode(codeData);
 
 //링크 해봄
-mix.link("second",{
-    codeData:{
+code.link("second",{
+    iD:{
         packageId:"MATH",
         packageVersion:"1",
-        id:"Subtract",
-        data:{}
+        id:"Subtract"
+    },
+    data:{},
+    linkingPointsData:{},
+    controllerDatas:{}
+});
+
+code.getLinkingPoint("second").linked.link("first",{
+    iD:{
+        packageId:"MATH",
+        packageVersion:"1",
+        id:"Number"
+    },
+    data:{
+        number:80
     },
     linkingPointsData:{},
     controllerDatas:{}
 });
 
-mix.linkingPoints.second.linked.link("first",{
-    codeData:{
+code.getLinkingPoint("second").linked.link("second",{
+    iD:{
         packageId:"MATH",
         packageVersion:"1",
-        id:"Number",
-        data:{
-            number:80
-        }
+        id:"Number"
+    },
+    data:{
+        number:40
     },
     linkingPointsData:{},
     controllerDatas:{}
 });
 
-mix.linkingPoints.second.linked.link("second",{
-    codeData:{
-        packageId:"MATH",
-        packageVersion:"1",
-        id:"Number",
-        data:{
-            number:40
-        }
-    },
-    linkingPointsData:{},
-    controllerDatas:{}
-});
 
-//컴파일 최고!
+//컴파일
 console.log("_________________");
-console.log(JSON.stringify(mixDatas, null, 2));
+console.log(JSON.stringify(codeDatas, null, 2));
 console.log("_Yes spaces________________");
+context.space = true;
+console.log(area.getController("compiler")[0].compile());
+console.log(JSON.stringify(contextData, null, 2));
+console.log("_No spaces________________");
+context.space = false;
+console.log(area.getController("compiler")[0].compile());
+console.log(JSON.stringify(contextData, null, 2));
+
+
+//뗐다 붙였다
+code.unlink("first");
+code.link("first", {
+    iD:{
+        packageId:"MATH",
+        packageVersion:"1",
+        id:"Power"
+    },
+    data:{},
+    linkingPointsData:{},
+    controllerDatas:{}
+});
+code.getLinked("first").link("first", {
+    iD:{
+        packageId:"MATH",
+        packageVersion:"1",
+        id:"Number"
+    },
+    data:{
+        number:2
+    },
+    linkingPointsData:{},
+    controllerDatas:{}
+});
+code.getLinked("first").link("second", {
+    iD:{
+        packageId:"MATH",
+        packageVersion:"1",
+        id:"Number"
+    },
+    data:{
+        number:50
+    },
+    linkingPointsData:{},
+    controllerDatas:{}
+});
+
+//컴파일
+console.log("_________________");
+console.log(JSON.stringify(codeDatas, null, 2));
+console.log("_Yes spaces________________");
+context.space = true;
 console.log(area.getController("compiler")[0].compile());
 console.log(JSON.stringify(contextData, null, 2));
 console.log("_No spaces________________");

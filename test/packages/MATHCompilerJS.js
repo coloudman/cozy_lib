@@ -10,25 +10,41 @@ class Number extends Controller {
     }
 }
 
-class Add extends Controller {
-    init() {
-        this.code.linkingPoints.second.on("link",()=>{
-            console.log(this.linkedControllers.second);
-        });
-    }
-    compile() {
+class BinaryOperator extends Controller {
+    init() {}
+    make(symbol) {
         const space = this.context.space ? " " : "";
-        return `(${this.linkedControllers.first.compile()})${space}+${space}(${this.linkedControllers.second.compile()})`;
+        return `(${this.getLinked("first").compile()})${space}${symbol}${space}(${this.getLinked("second").compile()})`;
     }
 }
 
-class Subtract extends Controller {
-    init() {
-
-    }
+class Add extends BinaryOperator{
     compile() {
-        const space = this.context.space ? " " : "";
-        return `(${this.linkedControllers.first.compile()})${space}-${space}(${this.linkedControllers.second.compile()})`;
+        return this.make("+");
+    }
+}
+
+class Subtract extends BinaryOperator {
+    compile() {
+        return this.make("-");
+    }
+}
+
+class Multiply extends BinaryOperator {
+    compile() {
+        return this.make("*");
+    }
+}
+
+class Divide extends BinaryOperator {
+    compile() {
+        return this.make("/");
+    }
+}
+
+class Power extends BinaryOperator {
+    compile() {
+        return this.make("**");
     }
 }
 
@@ -40,6 +56,9 @@ module.exports = {
     body: {
         Number,
         Add,
-        Subtract
+        Subtract,
+        Multiply,
+        Divide,
+        Power
     }
 }
