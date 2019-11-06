@@ -8,6 +8,9 @@ export default abstract class Controller {
     context: Context;
     linkingPointsManager: LinkingPointsManager<Controller>;
     constructor(code: Code, data: Data, context: Context, linkingPointsManager: LinkingPointsManager<Controller>);
+    getLinkingPoints(): {
+        [linkingPointName: string]: import("../LinkingPoint/LinkingPoint").default<Controller>;
+    };
     getLinkingPoint(name: string): import("../LinkingPoint/LinkingPoint").default<Controller>;
     getLinked(name: string): Controller;
     abstract init(): any;

@@ -20,6 +20,9 @@ export default abstract class Controller {
         this.init();
     }
 
+    getLinkingPoints() {
+        return this.linkingPointsManager.linkingPoints;
+    }
     getLinkingPoint(name : string) {
         return this.linkingPointsManager.getLinkingPoint(name);
     }

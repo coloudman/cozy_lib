@@ -164,6 +164,9 @@ abstract class Code {
 
 
     //그냥 그런거
+    getLinkingPoints() {
+        return this.codeLinkingPointsManager.linkingPoints;
+    }
     getLinkingPoint(name : string) : LinkingPoint<Code> {
         return this.codeLinkingPointsManager.getLinkingPoint(name);
     }

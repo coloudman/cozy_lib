@@ -29,6 +29,9 @@ declare abstract class Code {
     addDefaultLinkingPoints(names: string[]): void;
     link(name: string, codeData: CodeData): void;
     unlink(name: string): void;
+    getLinkingPoints(): {
+        [linkingPointName: string]: LinkingPoint<Code>;
+    };
     getLinkingPoint(name: string): LinkingPoint<Code>;
     getLinked(name: string): Code;
 }
