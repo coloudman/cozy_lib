@@ -1,30 +1,33 @@
 import LinkingPoint from "./LinkingPoint";
 import EventEmitter from "wolfy87-eventemitter";
+import LinkingPoints from "./LinkingPoints";
 
 
-declare interface LinkingPointsManager<T> {
-    on(event : "added" | "removed", listener : (linkingPointName : string) => void) : this
+declare interface LinkingPointsManager<D, T> {
+    on(event : "added", listener : (linkingPointName : string, linkingPoint : LinkingPoint<D, T>) => void) : this
+    on(event : "removed", listener : (linkingPointName : string) => void) : this
     on(event: string, listener: Function): this
     on(event: RegExp, listener: Function): this
 
-    emit(event : "added" | "removed", linkingPointName : string) : this
+    emit(event : "added", linkingPointName : string, linkingPoint : LinkingPoint<D, T>) : this
+    emit(event : "removed", linkingPointName : string) : this
     emit(event : string, ...args : any): this
     emit(event : RegExp, ...args : any): this
 }
 
-class LinkingPointsManager<T> extends EventEmitter {
-    linkingPoints: {
-        [linkingPointName : string]: LinkingPoint<T>
-    }
+abstract class LinkingPointsManager<D, T> extends EventEmitter {
+    linkingPoints: LinkingPoints<D,T>
 
     constructor() {
         super();
         this.linkingPoints = {};
     }
     
+    abstract createLinkingPoint() : LinkingPoint<D, T>
+
     addLinkingPoint(name : string) {
-        const linkingPoint = this.linkingPoints[name] = new LinkingPoint<T>();
-        this.emit("added", name);
+        const linkingPoint = this.linkingPoints[name] = this.createLinkingPoint();
+        this.emit("added", name, linkingPoint);
 
         return linkingPoint;
     }
@@ -32,8 +35,8 @@ class LinkingPointsManager<T> extends EventEmitter {
         delete this.linkingPoints[name];
         this.emit("removed", name);
     }
-    link(name : string, t : T) {
-        this.linkingPoints[name].link(t);
+    link(name : string, data : D) {
+        return this.linkingPoints[name].link(data);
     }
     unlink(name : string) {
         this.linkingPoints[name].unlink();
@@ -45,6 +48,9 @@ class LinkingPointsManager<T> extends EventEmitter {
     }
     getLinked(name : string) {
         return this.linkingPoints[name].linked;
+    }
+    getLinkingPoints() {
+        return this.linkingPoints;
     }
 }
 

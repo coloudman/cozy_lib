@@ -2,10 +2,12 @@ import Loader from "./ElementLoader";
 import Code from "../Element/Code";
 import CodePackage from "../Package/CodePackage";
 import CodeData from "../struct/CodeData";
-import Context from "@src/structClass/Context";
 import ControllerLoaders from "@src/structClass/ControllerLoaders";
+import Packages from "@src/Package/Packages";
+import Contexts from "@src/structClass/Contexts";
 export default class CodeLoader extends Loader<CodePackage> {
-    load(controllerLoaders: ControllerLoaders, codeData: CodeData, contexts: {
-        [controllerName: string]: Context;
-    }): Code;
+    controllerLoaders: ControllerLoaders;
+    contexts: Contexts;
+    constructor(packages: Packages<CodePackage>, controllerLoaders: ControllerLoaders, contexts: Contexts);
+    load(codeData: CodeData): Code;
 }

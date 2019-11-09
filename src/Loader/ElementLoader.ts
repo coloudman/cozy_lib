@@ -1,9 +1,6 @@
 
 import Package from "../Package/Package";
-
-type Packages<PackageT extends Package<any>> = {
-    [name:string]: PackageT
-}
+import Packages from "@src/Package/Packages";
 
 
 export default class Loader<PackageT extends Package<any>> {

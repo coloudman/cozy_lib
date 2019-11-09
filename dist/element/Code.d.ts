@@ -3,11 +3,9 @@ import CodeLoader from "../Loader/CodeLoader";
 import CodeData from "../struct/CodeData";
 import Controller from "./Controller";
 import Context from "../structClass/Context";
-import LinkingPoint from "@src/LinkingPoint/LinkingPoint";
-declare abstract class Code {
+declare class Code {
     private codeLinkingPointsManager;
     private controllerLinkingPointsManagers;
-    abstract init(): any;
     controllerLoaders: ControllerLoaders;
     codeLoader: CodeLoader;
     codeData: CodeData;
@@ -24,15 +22,13 @@ declare abstract class Code {
     runOnExistLinkingPoints(f: (linkingPointName: string, linked: Code) => any): void;
     addController(name: string): Controller;
     removeController(name: string, withData?: boolean): void;
-    addLinkingPoint(name: string): LinkingPoint<Code>;
+    addLinkingPoint(name: string): import("../LinkingPoint/LinkingPoint").default<CodeData, Code>;
     removeLinkingPoint(name: string): void;
     addDefaultLinkingPoints(names: string[]): void;
-    link(name: string, codeData: CodeData): void;
+    link(name: string, codeData: CodeData): Code;
     unlink(name: string): void;
-    getLinkingPoints(): {
-        [linkingPointName: string]: LinkingPoint<Code>;
-    };
-    getLinkingPoint(name: string): LinkingPoint<Code>;
+    getLinkingPoints(): import("..").LinkingPoints<CodeData, Code>;
+    getLinkingPoint(name: string): import("../LinkingPoint/LinkingPoint").default<CodeData, Code>;
     getLinked(name: string): Code;
 }
 export default Code;

@@ -4,6 +4,23 @@ const testPackage = require("./packages/MATHCode");
 const testCompilerPackage = require("./packages/MATHCompilerJS");
 
 
+class myCompilerContext extends Context {
+    constructor(data) {
+        super(data);
+        if(this.data.space === undefined) {
+            this.data.space = true;
+        }
+    }
+    set space(space) {
+        this.data.space = space;
+        this.emit("spaceChanged", space);
+    }
+    get space() {
+        return this.data.space;
+    }
+}
+
+
 //코드 클래스를 보관함
 const codePackages = {
     testPackage
@@ -14,10 +31,19 @@ const compilerPackages = {
 };
 
 
-//코드 클래스를 불러옴
-const codeLoader = new CodeLoader(codePackages);
+//로더로더
+const compilerLoaders = {
+    compiler:new ControllerLoader(compilerPackages)
+};
 
-const compilerLoader = new ControllerLoader(compilerPackages);
+//콘텍스트
+const contextData = {};
+const contexts = {
+    compiler:new myCompilerContext(contextData)
+};
+
+//코드로더가 마지막에 뙇
+const codeLoader = new CodeLoader(codePackages, compilerLoaders, contexts);
 
 
 //코드 데이터. 순수 JSON임
@@ -47,31 +73,10 @@ const codeData = {
 
 const codeDatas = [];
 
-class myCompilerContext extends Context {
-    constructor(data) {
-        super(data);
-        if(this.data.space === undefined) {
-            this.data.space = true;
-        }
-    }
-    set space(space) {
-        this.data.space = space;
-        this.emit("spaceChanged", space);
-    }
-    get space() {
-        return this.data.space;
-    }
-}
 
-const contextData = {};
-const context = new myCompilerContext(contextData);
 
 //코드 클래스들을 엮어줌
-const area = new Area(codeLoader, {
-    compiler:compilerLoader
-}, codeDatas, {
-    compiler:context
-});
+const area = new Area(codeLoader, compilerLoaders, codeDatas, contexts);
 area.addController("compiler");
 
 const code = area.addCode(codeData);
@@ -119,11 +124,11 @@ code.getLinkingPoint("second").linked.link("second",{
 console.log("_________________");
 console.log(JSON.stringify(codeDatas, null, 2));
 console.log("_Yes spaces________________");
-context.space = true;
+contexts.compiler.space = true;
 console.log(area.getController("compiler")[0].compile());
 console.log(JSON.stringify(contextData, null, 2));
 console.log("_No spaces________________");
-context.space = false;
+contexts.compiler.space = false;
 console.log(area.getController("compiler")[0].compile());
 console.log(JSON.stringify(contextData, null, 2));
 
@@ -169,10 +174,10 @@ code.getLinked("first").link("second", {
 console.log("_________________");
 console.log(JSON.stringify(codeDatas, null, 2));
 console.log("_Yes spaces________________");
-context.space = true;
+contexts.compiler.space = true;
 console.log(area.getController("compiler")[0].compile());
 console.log(JSON.stringify(contextData, null, 2));
 console.log("_No spaces________________");
-context.space = false;
+contexts.compiler.space = false;
 console.log(area.getController("compiler")[0].compile());
 console.log(JSON.stringify(contextData, null, 2));

@@ -8,10 +8,6 @@ import CodeData from "@src/struct/CodeData";
 import Context from "@src/structClass/Context";
 import CodeLoader from "@src/Loader/CodeLoader";
 
-type LinkingPoints = {
-    [name : string]: LinkingPoint<Code>
-}
-
 export default interface CodePackage extends Package<Code> {
     body: {
         [name:string]: {

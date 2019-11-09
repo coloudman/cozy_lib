@@ -1,8 +1,6 @@
 const  { Code } = require("../../dist/index");
 
 class Number extends Code {
-    init() {
-    }
     setNumber(number) {
         this.data.number = number;
     }
@@ -13,7 +11,8 @@ class Number extends Code {
 
 
 class BinaryOperator extends Code {
-    init() {
+    constructor() {
+        super(...arguments);
         this.addDefaultLinkingPoints(["first","second"]);
     }
 }

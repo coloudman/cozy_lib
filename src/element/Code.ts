@@ -1,24 +1,20 @@
 
 
 
-import LinkingPoints from "../LinkingPoint/LinkingPoints";
-import Data from "../struct/Data";
-import EventEmitter from "wolfy87-eventemitter";
-import LinkingPointsManager from "../LinkingPoint/LinkingPointsManager";
 import ControllerLoaders from "../structClass/ControllerLoaders";
 import CodeLoader from "../Loader/CodeLoader";
 import CodeData from "../struct/CodeData";
 import Controller from "./Controller";
 import Context from "../structClass/Context";
-import LinkingPoint from "@src/LinkingPoint/LinkingPoint";
+import CodeLinkingPointsManager from "../LinkingPoint/CodeLinkingPointsManager";
+import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
 
-abstract class Code {
-    private codeLinkingPointsManager: LinkingPointsManager<Code>
+class Code {
+    private codeLinkingPointsManager: CodeLinkingPointsManager
     private controllerLinkingPointsManagers: {
-        [controllerName : string]: LinkingPointsManager<Controller>
+        [controllerName : string]: ControllerLinkingPointsManager
     };
 
-    public abstract init(): any
     /*
     자신과 그에 연결된 Controller들을 관리할 수 있습니다.
     자식 Code는 늘 부모와 같은 Controller들을 가집니다.
@@ -39,40 +35,81 @@ abstract class Code {
     data: any;
 
     constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, codeData : CodeData, contexts : {[controllerName:string]:Context}) {
-        //this는 CodeLoader로부터 로드된 / 또는 그냥 클래스 입니다.
+
+        this.codeData = codeData;
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
-        this.codeData = codeData;
         this.contexts = contexts;
-        this.controllers = {};
 
-        this.codeLinkingPointsManager = new LinkingPointsManager<Code>();
+        this.codeLinkingPointsManager = new CodeLinkingPointsManager(codeLoader);
         this.controllerLinkingPointsManagers = {};
 
+        this.controllers = {};
+
+        //얘도 좀 편하라고 만든거..
         this.data = codeData.data;
 
-        // 연결점 제작
-        Object.entries(codeData.linkingPointsData).forEach(([name, childCodeData])=>{
-            this.codeLinkingPointsManager.addLinkingPoint(name);
-            this.codeLinkingPointsManager.link(name, this.codeLoader.load(controllerLoaders, childCodeData, contexts));
+        /*
+        링킹포인트 리스너(기능.)
+        기능 연결은 뭔가 하기 전에 이루어져야 함.
+        ex) 자식 코드들 제작
+        */
+        this.codeLinkingPointsManager.on("added", (linkingPointName, linkingPoint) => {//링킹포인트가 추가됨
+            linkingPoint
+            .on("linked", (code, codeData) => {//링킹포인트에 코드가 연결됬을 때
+                //모든 컨트롤러들의 연결점. 링킹포인트 이름에 자식 code의 controller를 저장
+                Object.entries(this.controllerLinkingPointsManagers).forEach(([controllerName, controllerLinkingPointsManager]) => {
+                    controllerLinkingPointsManager.link(linkingPointName, code.addController(controllerName));
+                });
+                //데이터
+                this.codeData.linkingPointsData[linkingPointName] = codeData;
+            })
+            .on("unlinked", () => {
+                Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
+                    controllerLinkingPointsManager.unlink(linkingPointName);
+                });
+                //데이터
+                delete this.codeData.linkingPointsData[linkingPointName];
+            });
+
+            //컨트롤러들에도 링킹포인트 추가
+            Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
+                controllerLinkingPointsManager.addLinkingPoint(linkingPointName);
+            });
+        });
+        this.codeLinkingPointsManager.on("removed", linkingPointName => {
+            //어차피 링킹포인트가 지워질 때, 알아서 리스너도 삭제되므로 removeListener는 할 필요 없다.
+            //컨트롤러들에서 링킹포인트 삭제
+            Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
+                controllerLinkingPointsManager.removeLinkingPoint(linkingPointName);
+            });
         });
 
 
-        this.init();
+
+        // 자식 코드들 제작
+        Object.entries(codeData.linkingPointsData).forEach(([name, childCodeData])=>{
+            this.addLinkingPoint(name);
+            this.link(name, childCodeData);
+        });
+
 
         /*
-        참고:
         Code의 Constructor에서는 Controller들을 로드하지 않습니다.
         Controller들은 추후에 addController / removeController를 통해 추가 / 삭제 할 수 있습니다.
         */
+
+
+
+
     }
 
 
     //유틸, 모든 연결된 Code 연결점에서 실행
     
     runOnExistLinkingPoints(f : (linkingPointName : string, linked : Code) => any) {
-        Object.entries(this.codeLinkingPointsManager.linkingPoints).forEach(([linkingPointName, linkingPoint]) => {
+        Object.entries(this.codeLinkingPointsManager.getLinkingPoints()).forEach(([linkingPointName, linkingPoint]) => {
             if(linkingPoint.linked) {
                 f(linkingPointName, linkingPoint.linked);
             }
@@ -82,7 +119,7 @@ abstract class Code {
     // 컨트롤러 관련
     addController(name : string): Controller {
         //컨트롤러를 위한 연결점 관리자 생성
-        const controllerLinkingPointsManager = this.controllerLinkingPointsManagers[name] = new LinkingPointsManager<Controller>();
+        const controllerLinkingPointsManager = this.controllerLinkingPointsManagers[name] = new ControllerLinkingPointsManager();
         Object.entries(this.codeLinkingPointsManager.linkingPoints).forEach(([linkingPointName, linkingPoint]) => {
             controllerLinkingPointsManager.addLinkingPoint(linkingPointName);
             if(linkingPoint.linked) {
@@ -92,7 +129,13 @@ abstract class Code {
 
         //컨트롤러의 데이터 없을시 제작
         const controllerData = this.codeData.controllerDatas[name] || (this.codeData.controllerDatas[name] = {});
-        const controller = this.controllerLoaders[name].load(this, this.codeData.iD, controllerData, this.contexts[name], controllerLinkingPointsManager);
+        const controller = this.controllerLoaders[name].load({
+            code:this,
+            iD:this.codeData.iD,
+            data:controllerData, 
+            context:this.contexts[name], 
+            linkingPointsManager: controllerLinkingPointsManager
+        });
 
         this.controllers[name] = controller;
         return controller;
@@ -116,58 +159,40 @@ abstract class Code {
         }
     }
 
-    //링킹포인트(연결점) 관련
-    //Code, Controller들에게 모두 링킹포인트 추가
-    addLinkingPoint(name : string) {
-        const linkingPoint = this.codeLinkingPointsManager.addLinkingPoint(name);
-        Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
-            controllerLinkingPointsManager.addLinkingPoint(name);
-        });
 
-        return linkingPoint;
+
+
+
+    /*
+    편하게 쓸 수 있게 여러(주로 LinkingPoint) 메서드를 꾹꾹 눌러 담은 함수들
+    */
+
+    addLinkingPoint(name : string) {
+        return this.codeLinkingPointsManager.addLinkingPoint(name);
     }
     removeLinkingPoint(name : string) {
-        this.codeLinkingPointsManager.removeLinkingPoint(name);
-        Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
-            controllerLinkingPointsManager.removeLinkingPoint(name);
-        });
+        return this.codeLinkingPointsManager.removeLinkingPoint(name);
     }
 
-    addDefaultLinkingPoints(names : string[]) {
+    addDefaultLinkingPoints(names : string[]) { //특정 링킹포인트들을 무조건 존재하게 만듭니다.(없을시 생성)
         names.forEach(name => {
-            if(!this.codeLinkingPointsManager.linkingPoints[name]) {
+            if(!this.codeLinkingPointsManager.getLinkingPoint(name)) {
                 this.addLinkingPoint(name);
             }
         });
     }
 
-    //링크!
     link(name : string, codeData : CodeData) {
-        const code = this.codeLoader.load(this.controllerLoaders, codeData, this.contexts);
-        this.codeLinkingPointsManager.link(name, code);
-        //모든 controllerLinkingPointsManager 들에 대해 반복, 연결점 이름에다가 자식 code의 controller를 저장
-        Object.entries(this.controllerLinkingPointsManagers).forEach(([controllerName, controllerLinkingPointsManager]) => {
-            controllerLinkingPointsManager.link(name, code.addController(controllerName));
-        });
-        //데이터
-        this.codeData.linkingPointsData[name] = codeData;
+        return this.codeLinkingPointsManager.link(name, codeData);
     }
     unlink(name : string) {
-        this.codeLinkingPointsManager.unlink(name);
-
-        Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
-            controllerLinkingPointsManager.unlink(name);
-        });
-        //데이터
-        delete this.codeData.linkingPointsData[name];
+        return this.codeLinkingPointsManager.unlink(name);
     }
 
-
-    //그냥 그런거
     getLinkingPoints() {
         return this.codeLinkingPointsManager.linkingPoints;
     }
-    getLinkingPoint(name : string) : LinkingPoint<Code> {
+    getLinkingPoint(name : string) {
         return this.codeLinkingPointsManager.getLinkingPoint(name);
     }
     getLinked(name : string) {

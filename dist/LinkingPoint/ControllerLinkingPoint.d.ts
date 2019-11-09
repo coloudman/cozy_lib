@@ -1,4 +1,7 @@
 import LinkingPoint from "./LinkingPoint";
 import Controller from "@src/Element/Controller";
-export default class MixLinkingPoint extends LinkingPoint<Controller> {
+declare class ControllerLinkingPoint extends LinkingPoint<Controller, Controller> {
+    constructor();
+    loadData(controller: Controller): Controller;
 }
+export default ControllerLinkingPoint;
