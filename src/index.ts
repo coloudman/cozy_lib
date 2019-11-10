@@ -26,6 +26,10 @@ import ID from "./struct/ID";
 import LinkingPointsData from "./struct/LinkingPointsData";
 
 import Context from "./structClass/Context";
+import ControllerInfo from "./structClass/ControllerInfo";
+import ControllerLoaders from "./structClass/ControllerLoaders";
+
+//Struct
 
 
 
@@ -51,5 +55,12 @@ export {
     CodePackage,
     ControllerPackage,
 
-    Context
+    CodeData,
+    Data,
+    ID,
+    LinkingPointsData,
+
+    Context,
+    ControllerInfo,
+    ControllerLoaders
 };
