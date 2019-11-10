@@ -22,6 +22,7 @@ declare class Code {
     runOnExistLinkingPoints(f: (linkingPointName: string, linked: Code) => any): void;
     addController(name: string): Controller;
     removeController(name: string, withData?: boolean): void;
+    getController(name: string): Controller;
     addLinkingPoint(name: string): import("../LinkingPoint/LinkingPoint").default<CodeData, Code>;
     removeLinkingPoint(name: string): void;
     addDefaultLinkingPoints(names: string[]): void;

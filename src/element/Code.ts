@@ -158,8 +158,9 @@ class Code {
             delete this.codeData.controllerDatas[name];
         }
     }
-
-
+    getController(name : string) {
+        return this.controllers[name];
+    }
 
 
 
