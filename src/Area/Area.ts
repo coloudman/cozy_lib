@@ -24,17 +24,15 @@ class Area extends EventEmitter {
     */
 
     codeLoader: CodeLoader;
-    controllerLoaders: ControllerLoaders;
     codes: Code[];
     controllerNames: string[];
     codeDatas: CodeData[];
     contexts: { [controllerName: string]: Context; };
     
-    constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, codeDatas : CodeData[], contexts : {[controllerName:string]:Context}) {
+    constructor(codeLoader : CodeLoader, codeDatas : CodeData[], contexts : {[controllerName:string]:Context}) {
         super();
 
         this.codeLoader = codeLoader;
-        this.controllerLoaders = controllerLoaders;
         this.contexts = contexts;
         
         this.codes = [];

@@ -1,7 +1,7 @@
 
-const { CodeLoader, ControllerLoader, Area, Context } = require("../dist/index");
-const testPackage = require("./packages/MATHCode");
-const testCompilerPackage = require("./packages/MATHCompilerJS");
+const { CodeLoader, ControllerLoader, Area, Context } = require("cozy_lib");
+const testPackage = require("./mathPackages/MATHCode");
+const testCompilerPackage = require("./mathPackages/MATHCompilerJS");
 
 
 class myCompilerContext extends Context {
@@ -76,7 +76,7 @@ const codeDatas = [];
 
 
 //코드 클래스들을 엮어줌
-const area = new Area(codeLoader, compilerLoaders, codeDatas, contexts);
+const area = new Area(codeLoader, codeDatas, contexts);
 area.addController("compiler");
 
 const code = area.addCode(codeData);

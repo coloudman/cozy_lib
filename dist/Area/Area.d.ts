@@ -1,5 +1,4 @@
 import CodeLoader from "@src/Loader/CodeLoader";
-import ControllerLoaders from "@src/structClass/ControllerLoaders";
 import CodeData from "@src/struct/CodeData";
 import Code from "../Element/Code";
 import Controller from "@src/Element/Controller";
@@ -15,14 +14,13 @@ declare interface Area {
 }
 declare class Area extends EventEmitter {
     codeLoader: CodeLoader;
-    controllerLoaders: ControllerLoaders;
     codes: Code[];
     controllerNames: string[];
     codeDatas: CodeData[];
     contexts: {
         [controllerName: string]: Context;
     };
-    constructor(codeLoader: CodeLoader, controllerLoaders: ControllerLoaders, codeDatas: CodeData[], contexts: {
+    constructor(codeLoader: CodeLoader, codeDatas: CodeData[], contexts: {
         [controllerName: string]: Context;
     });
     addCode(codeData: CodeData): Code;
