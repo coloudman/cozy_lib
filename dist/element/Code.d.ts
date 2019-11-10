@@ -3,8 +3,9 @@ import CodeLoader from "../Loader/CodeLoader";
 import CodeData from "../struct/CodeData";
 import Controller from "./Controller";
 import Context from "../structClass/Context";
+import CodeLinkingPointsManager from "../LinkingPoint/CodeLinkingPointsManager";
 declare class Code {
-    private codeLinkingPointsManager;
+    codeLinkingPointsManager: CodeLinkingPointsManager;
     private controllerLinkingPointsManagers;
     controllerLoaders: ControllerLoaders;
     codeLoader: CodeLoader;

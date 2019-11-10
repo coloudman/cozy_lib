@@ -10,7 +10,7 @@ import CodeLinkingPointsManager from "../LinkingPoint/CodeLinkingPointsManager";
 import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
 
 class Code {
-    private codeLinkingPointsManager: CodeLinkingPointsManager
+    codeLinkingPointsManager: CodeLinkingPointsManager
     private controllerLinkingPointsManagers: {
         [controllerName : string]: ControllerLinkingPointsManager
     };
@@ -161,7 +161,6 @@ class Code {
     getController(name : string) {
         return this.controllers[name];
     }
-
 
 
     /*
