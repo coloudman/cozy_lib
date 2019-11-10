@@ -1,5 +1,5 @@
 
-const { CodeLoader, ControllerLoader, Area, Context } = require("cozy_lib");
+const { CodeLoader, ControllerLoader, Area, Context } = require("../dist/index");
 const testPackage = require("./mathPackages/MATHCode");
 const testCompilerPackage = require("./mathPackages/MATHCompilerJS");
 
