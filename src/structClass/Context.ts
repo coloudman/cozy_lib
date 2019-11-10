@@ -1,6 +1,6 @@
 
 
-import Data from "@src/struct/Data";
+import Data from "../struct/Data";
 import EventEmitter from "wolfy87-eventemitter";
 
 class Context extends EventEmitter {

@@ -1,10 +1,9 @@
 import Code from "./Code";
 
-import Data from "@src/struct/Data";
-import Context from "@src/structClass/Context";
-import LinkingPointsManager from "@src/LinkingPoint/LinkingPointsManager";
+import Data from "../struct/Data";
+import Context from "../structClass/Context";
 import EventEmitter from "wolfy87-eventemitter";
-import ControllerLinkingPointsManager from "@src/LinkingPoint/ControllerLinkingPointsManager";
+import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
 
 declare interface Controller {
     on(event : "init" | "stop", listener : () => void) : this

@@ -1,9 +1,9 @@
-import CodeLoader from "@src/Loader/CodeLoader";
-import CodeData from "@src/struct/CodeData";
+import CodeLoader from "../Loader/CodeLoader";
+import CodeData from "../struct/CodeData";
 import Code from "../Element/Code";
-import Controller from "@src/Element/Controller";
+import Controller from "../Element/Controller";
 import EventEmitter from "wolfy87-eventemitter";
-import Context from "@src/structClass/Context";
+import Context from "../structClass/Context";
 declare interface Area {
     on(event: "codeAdded" | "codeRemoved", listener: (code: Code) => void): this;
     on(event: string, listener: Function): this;

@@ -2,9 +2,9 @@ import Loader from "./ElementLoader";
 import Code from "../Element/Code";
 import CodePackage from "../Package/CodePackage";
 import CodeData from "../struct/CodeData";
-import ControllerLoaders from "@src/structClass/ControllerLoaders";
-import Packages from "@src/Package/Packages";
-import Contexts from "@src/structClass/Contexts";
+import ControllerLoaders from "../structClass/ControllerLoaders";
+import Packages from "../Package/Packages";
+import Contexts from "../structClass/Contexts";
 export default class CodeLoader extends Loader<CodePackage> {
     controllerLoaders: ControllerLoaders;
     contexts: Contexts;

@@ -1,10 +1,10 @@
-import Code from "@src/Element/Code";
-import ID from "@src/struct/ID";
+import Code from "../Element/Code";
+import ID from "../struct/ID";
 import Context from "./Context";
-import Data from "@src/struct/Data";
-import LinkingPointsManager from "@src/LinkingPoint/LinkingPointsManager";
-import Controller from "@src/Element/Controller";
-import ControllerLinkingPointsManager from "@src/LinkingPoint/ControllerLinkingPointsManager";
+import Data from "../struct/Data";
+import LinkingPointsManager from "../LinkingPoint/LinkingPointsManager";
+import Controller from "../Element/Controller";
+import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
 
 
 export default interface ControllerInfo {

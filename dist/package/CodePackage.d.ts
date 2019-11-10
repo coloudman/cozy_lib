@@ -1,9 +1,9 @@
 import Code from "../Element/Code";
 import Package from "./Package";
-import ControllerLoaders from "@src/structClass/ControllerLoaders";
-import CodeData from "@src/struct/CodeData";
-import Context from "@src/structClass/Context";
-import CodeLoader from "@src/Loader/CodeLoader";
+import ControllerLoaders from "../structClass/ControllerLoaders";
+import CodeData from "../struct/CodeData";
+import Context from "../structClass/Context";
+import CodeLoader from "../Loader/CodeLoader";
 export default interface CodePackage extends Package<Code> {
     body: {
         [name: string]: {
