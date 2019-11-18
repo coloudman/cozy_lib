@@ -8,8 +8,19 @@ import Controller from "./Controller";
 import Context from "../structClass/Context";
 import CodeLinkingPointsManager from "../LinkingPoint/CodeLinkingPointsManager";
 import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
+import EventEmitter from "wolfy87-eventemitter";
 
-class Code {
+declare interface Code {
+    on(event : "stopped", listener : () => void) : this
+    on(event: string, listener: Function): this
+    on(event: RegExp, listener: Function): this
+
+    emit(event : "stopped") : this
+    emit(event : string, ...args : any): this
+    emit(event : RegExp, ...args : any): this
+}
+
+class Code extends EventEmitter {
     codeLinkingPointsManager: CodeLinkingPointsManager
     private controllerLinkingPointsManagers: {
         [controllerName : string]: ControllerLinkingPointsManager
@@ -35,6 +46,7 @@ class Code {
     data: any;
 
     constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, codeData : CodeData, contexts : {[controllerName:string]:Context}) {
+        super();
 
         this.codeData = codeData;
 
@@ -64,6 +76,12 @@ class Code {
                 });
                 //데이터
                 this.codeData.linkingPointsData[linkingPointName] = codeData;
+
+
+                //추가!! "자식이" 부모랑 끊기를 원할 때(스탑됬을 때), 그 연결점에서 연결을 끊습니다.
+                code.on("stopped", ()=>{
+                    this.unlink(linkingPointName);
+                });
             })
             .on("unlinked", () => {
                 Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
@@ -197,6 +215,17 @@ class Code {
     }
     getLinked(name : string) {
         return this.codeLinkingPointsManager.getLinked(name);
+    }
+
+
+    //stop, 정지 관련
+    stop() {
+        //컨트롤러들을 없애고, 자동적으로 그들은 stop됩니다.
+        Object.keys(this.controllers).forEach(controllerName => {
+            this.removeController(controllerName);
+        });
+        //스탑 이벤트
+        this.emit("stopped");
     }
 };
 
