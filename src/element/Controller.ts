@@ -43,7 +43,12 @@ abstract class Controller extends EventEmitter {
     }
     
     stop() {
-        this.emit("stop");
+        Object.values(this.getLinkingPoints()).forEach(linkingPoint => { //하위 컨트롤러들 스탑
+            if(linkingPoint.linked) {
+                linkingPoint.linked.stop();
+            }
+        });
+        this.emit("stop"); //이벤트 !
     }
 };
 
