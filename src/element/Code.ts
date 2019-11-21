@@ -72,7 +72,8 @@ class Code extends EventEmitter {
             .on("linked", (code, codeData) => {//링킹포인트에 코드가 연결됬을 때
                 //모든 컨트롤러들의 연결점. 링킹포인트 이름에 자식 code의 controller를 저장
                 Object.entries(this.controllerLinkingPointsManagers).forEach(([controllerName, controllerLinkingPointsManager]) => {
-                    controllerLinkingPointsManager.link(linkingPointName, code.addController(controllerName));
+                    const a = code.addController(controllerName);
+                    controllerLinkingPointsManager.link(linkingPointName, a);
                 });
                 //데이터
                 this.codeData.linkingPointsData[linkingPointName] = codeData;

@@ -41,6 +41,10 @@ abstract class Controller extends EventEmitter {
     getLinked(name : string) {
         return this.linkingPointsManager.getLinked(name);
     }
+
+    getCodeLinkingPoint(name : string) {
+        return this.code.codeLinkingPointsManager.getLinkingPoint(name);
+    }
     
     stop() {
         Object.values(this.getLinkingPoints()).forEach(linkingPoint => { //하위 컨트롤러들 스탑
