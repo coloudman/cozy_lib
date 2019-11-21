@@ -54,7 +54,7 @@ class Code extends EventEmitter {
         this.controllerLoaders = controllerLoaders;
         this.contexts = contexts;
 
-        this.codeLinkingPointsManager = new CodeLinkingPointsManager(codeLoader);
+        this.codeLinkingPointsManager = new CodeLinkingPointsManager(codeLoader, contexts);
         this.controllerLinkingPointsManagers = {};
 
         this.controllers = {};

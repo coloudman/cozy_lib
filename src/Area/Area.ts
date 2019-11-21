@@ -48,7 +48,7 @@ class Area extends EventEmitter {
     }
 
     addCode(codeData : CodeData) : Code {
-        const code = this.codeLoader.load(codeData);
+        const code = this.codeLoader.load(codeData, this.contexts);
         this.controllerNames.forEach(controllerName => {
             code.addController(controllerName);
         });

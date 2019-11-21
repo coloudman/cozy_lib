@@ -11,20 +11,18 @@ import Contexts from "../structClass/Contexts";
 
 export default class CodeLoader extends Loader<CodePackage> {
     controllerLoaders: ControllerLoaders;
-    contexts: Contexts;
     constructor(packages : Packages<CodePackage>, controllerLoaders : ControllerLoaders, contexts : Contexts) {
         super(packages);
         this.controllerLoaders = controllerLoaders;
-        this.contexts = contexts;
     }
-    load(codeData : CodeData) : Code {
+    load(codeData : CodeData, contexts : Contexts) : Code {
         const foundPackage = Object.values(this.packages).find((package_ : CodePackage) => {
             return codeData.iD.packageId === package_.id && codeData.iD.packageVersion === package_.version;
         });
 
         const Class = foundPackage.body[codeData.iD.id];
 
-        const instance = new Class(this, this.controllerLoaders, codeData, this.contexts);
+        const instance = new Class(this, this.controllerLoaders, codeData, contexts);
         return instance;
     }
 }
