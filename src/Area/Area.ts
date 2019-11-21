@@ -55,6 +55,10 @@ class Area extends EventEmitter {
         this.codeDatas.push(codeData);
 
         //event
+        code.on("stopped", () => {
+            //코드가 쥬것어.. 흑흑.. 시체 처리 하자
+            this.removeCode(code);
+        });
         this.emit("codeAdded", code);
         return code;
     }
