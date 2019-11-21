@@ -1,6 +1,6 @@
 {
   "name": "cozy_lib",
-  "version": "9.1.3",
+  "version": "9.2.0",
   "description": "cozy lib",
   "main": "dist/index.js",
   "scripts": {

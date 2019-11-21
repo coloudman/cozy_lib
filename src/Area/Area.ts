@@ -6,6 +6,7 @@ import Controller from "../Element/Controller";
 
 import EventEmitter from "wolfy87-eventemitter";
 import Context from "../structClass/Context";
+import Composers from "../structClass/Composers";
 
 
 declare interface Area {
@@ -28,6 +29,7 @@ class Area extends EventEmitter {
     controllerNames: string[];
     codeDatas: CodeData[];
     contexts: { [controllerName: string]: Context; };
+    composers: Composers;
     
     constructor(codeLoader : CodeLoader, codeDatas : CodeData[], contexts : {[controllerName:string]:Context}) {
         super();
@@ -85,6 +87,24 @@ class Area extends EventEmitter {
             code.addController(controllerName);
         });
         this.controllerNames.push(controllerName);
+    }
+
+
+
+    /* Compose 관련 */
+
+    setComposers(composers : Composers) {
+        this.composers = composers;
+    }
+    getComposers() {
+        return this.composers;
+    }
+
+    compose(controllerName : string) {
+        const controllers = this.codes.map(code => {
+            return code.getController(controllerName);
+        });
+        return this.composers[controllerName](controllers, this.contexts[controllerName]);
     }
 }
 
