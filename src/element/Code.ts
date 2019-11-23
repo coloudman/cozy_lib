@@ -218,6 +218,10 @@ class Code extends EventEmitter {
         return this.codeLinkingPointsManager.getLinked(name);
     }
 
+    //unlink me! 나를 놓아라!!
+    unlinkSelf() {
+        this.emit("unlink");
+    }
 
     //stop, 정지 관련
     stop() {
