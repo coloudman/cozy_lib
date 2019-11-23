@@ -13,9 +13,10 @@ class CodeLinkingPoint extends LinkingPoint<Code> {
         this.codeLoader = codeLoader;
         this.contexts = contexts;
 
+        const _this = this;
         this.on("linked", code => {
             code.on("unlink", function unlinkListener() {
-                this.unlink();
+                _this.unlink();
                 code.removeListener("unlink", unlinkListener);
             });
         });
