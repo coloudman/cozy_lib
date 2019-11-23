@@ -207,7 +207,7 @@ class Code extends EventEmitter {
     link(name : string, code : Code) {
         return this.codeLinkingPointsManager.link(name, code);
     }
-    linkByCodeData(name : string, codeData : CodeData) {
+    linkFromCodeData(name : string, codeData : CodeData) {
         return this.codeLinkingPointsManager.link(name, this.makeCode(codeData));
     }
     unlink(name : string) {

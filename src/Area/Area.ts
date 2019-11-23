@@ -66,7 +66,7 @@ class Area extends EventEmitter {
         this.emit("codeAdded", code);
         return code;
     }
-    addCodeByCodeData(codeData : CodeData) {
+    addCodeFromCodeData(codeData : CodeData) {
         return this.addCode(this.makeCode(codeData));
     }
     removeCode(code : Code) {

@@ -13,7 +13,7 @@ class CodeLinkingPoint extends LinkingPoint<Code> {
         this.codeLoader = codeLoader;
         this.contexts = contexts;
     }
-    linkByCodeData(codeData : CodeData) {
+    linkFromCodeData(codeData : CodeData) {
         return this.link(this.codeLoader.load(codeData, this.contexts));
     }
 }

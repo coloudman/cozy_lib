@@ -19,8 +19,8 @@ class CodeLinkingPointsManager extends LinkingPointsManager<Code>{
     createLinkingPoint() {
         return new CodeLinkingPoint(this.codeLoader, this.contexts);
     }
-    linkByCodeData(name : string, codeData : CodeData) {
-        return this.link(name, this.codeLoader.load(codeData, this.contexts));
+    linkFromCodeData(name : string, codeData : CodeData) {
+        return (<CodeLinkingPoint> this.linkingPoints[name]).linkFromCodeData(codeData);
     }
 }
 
