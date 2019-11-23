@@ -60,8 +60,9 @@ class Area extends EventEmitter {
         this.codeDatas.push(code.codeData);
 
         //event
+        const _this = this;
         code.on("unlink", function onUnlink() {
-            this.removeCode(code);
+            _this.removeCode(code);
             code.removeListener("unlink", onUnlink);
         });
         this.emit("codeAdded", code);
