@@ -77,12 +77,6 @@ class Code extends EventEmitter {
                 });
                 //데이터
                 this.codeData.linkingPointsData[linkingPointName] = code.codeData;
-
-
-                //추가!! "자식이" 부모랑 끊기를 원할 때, 그 연결점에서 연결을 끊습니다.
-                code.on("unlink", ()=>{
-                    this.unlink(linkingPointName);
-                });
             })
             .on("unlinked", () => {
                 Object.values(this.controllerLinkingPointsManagers).forEach(controllerLinkingPointsManager => {
