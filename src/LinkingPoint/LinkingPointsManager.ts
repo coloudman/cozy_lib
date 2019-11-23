@@ -3,27 +3,27 @@ import EventEmitter from "wolfy87-eventemitter";
 import LinkingPoints from "./LinkingPoints";
 
 
-declare interface LinkingPointsManager<D, T> {
-    on(event : "added", listener : (linkingPointName : string, linkingPoint : LinkingPoint<D, T>) => void) : this
+declare interface LinkingPointsManager<D> {
+    on(event : "added", listener : (linkingPointName : string, linkingPoint : LinkingPoint<D>) => void) : this
     on(event : "removed", listener : (linkingPointName : string) => void) : this
     on(event: string, listener: Function): this
     on(event: RegExp, listener: Function): this
 
-    emit(event : "added", linkingPointName : string, linkingPoint : LinkingPoint<D, T>) : this
+    emit(event : "added", linkingPointName : string, linkingPoint : LinkingPoint<D>) : this
     emit(event : "removed", linkingPointName : string) : this
     emit(event : string, ...args : any): this
     emit(event : RegExp, ...args : any): this
 }
 
-abstract class LinkingPointsManager<D, T> extends EventEmitter {
-    linkingPoints: LinkingPoints<D,T>
+abstract class LinkingPointsManager<D> extends EventEmitter {
+    linkingPoints: LinkingPoints<D>
 
     constructor() {
         super();
         this.linkingPoints = {};
     }
     
-    abstract createLinkingPoint() : LinkingPoint<D, T>
+    abstract createLinkingPoint() : LinkingPoint<D>
 
     addLinkingPoint(name : string) {
         const linkingPoint = this.linkingPoints[name] = this.createLinkingPoint();

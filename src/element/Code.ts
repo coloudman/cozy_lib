@@ -69,14 +69,14 @@ class Code extends EventEmitter {
         */
         this.codeLinkingPointsManager.on("added", (linkingPointName, linkingPoint) => {//링킹포인트가 추가됨
             linkingPoint
-            .on("linked", (code, codeData) => {//링킹포인트에 코드가 연결됬을 때
+            .on("linked", (code) => {//링킹포인트에 코드가 연결됬을 때
                 //모든 컨트롤러들의 연결점. 링킹포인트 이름에 자식 code의 controller를 저장
                 Object.entries(this.controllerLinkingPointsManagers).forEach(([controllerName, controllerLinkingPointsManager]) => {
                     const a = code.addController(controllerName);
                     controllerLinkingPointsManager.link(linkingPointName, a);
                 });
                 //데이터
-                this.codeData.linkingPointsData[linkingPointName] = codeData;
+                this.codeData.linkingPointsData[linkingPointName] = code.codeData;
 
 
                 //추가!! "자식이" 부모랑 끊기를 원할 때, 그 연결점에서 연결을 끊습니다.
@@ -110,7 +110,7 @@ class Code extends EventEmitter {
         // 자식 코드들 제작
         Object.entries(codeData.linkingPointsData).forEach(([name, childCodeData])=>{
             this.addLinkingPoint(name);
-            this.link(name, childCodeData);
+            this.link(name, this.makeCode(childCodeData));
         });
 
 
@@ -124,9 +124,12 @@ class Code extends EventEmitter {
 
     }
 
+    //나랑 똑같은 콘텍스트, 로더 가진 Code 만들기
+    makeCode(codeData : CodeData) {
+        return this.codeLoader.load(codeData, this.contexts);
+    }
 
     //유틸, 모든 연결된 Code 연결점에서 실행
-    
     runOnExistLinkingPoints(f : (linkingPointName : string, linked : Code) => any) {
         Object.entries(this.codeLinkingPointsManager.getLinkingPoints()).forEach(([linkingPointName, linkingPoint]) => {
             if(linkingPoint.linked) {
@@ -201,8 +204,11 @@ class Code extends EventEmitter {
         });
     }
 
-    link(name : string, codeData : CodeData) {
-        return this.codeLinkingPointsManager.link(name, codeData);
+    link(name : string, code : Code) {
+        return this.codeLinkingPointsManager.link(name, code);
+    }
+    linkByCodeData(name : string, codeData : CodeData) {
+        return this.codeLinkingPointsManager.link(name, this.makeCode(codeData));
     }
     unlink(name : string) {
         return this.codeLinkingPointsManager.unlink(name);

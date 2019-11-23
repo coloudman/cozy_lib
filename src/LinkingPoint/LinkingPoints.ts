@@ -1,6 +1,6 @@
 
 import LinkingPoint from "./LinkingPoint";
 
-export default interface LinkingPoints<D,T> {
-    [name : string]: LinkingPoint<D,T>
+export default interface LinkingPoints<D> {
+    [name : string]: LinkingPoint<D>
 }

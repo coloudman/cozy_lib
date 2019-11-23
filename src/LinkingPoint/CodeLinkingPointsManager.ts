@@ -8,7 +8,7 @@ import Contexts from "../structClass/Contexts";
 /*
 CodeData를 받아 생성자에서 넣어놓은 CodeLoader를 통해 CodeData를 로드하고 LinkingPointsManager<Code>에 저장합니다.
 */
-class CodeLinkingPointsManager extends LinkingPointsManager<CodeData, Code>{
+class CodeLinkingPointsManager extends LinkingPointsManager<Code>{
     codeLoader: CodeLoader;
     contexts: Contexts;
     constructor(codeLoader : CodeLoader, contexts : Contexts) {
@@ -18,6 +18,9 @@ class CodeLinkingPointsManager extends LinkingPointsManager<CodeData, Code>{
     }
     createLinkingPoint() {
         return new CodeLinkingPoint(this.codeLoader, this.contexts);
+    }
+    linkByCodeData(name : string, codeData : CodeData) {
+        return this.link(name, this.codeLoader.load(codeData, this.contexts));
     }
 }
 

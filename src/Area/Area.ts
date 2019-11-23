@@ -43,18 +43,21 @@ class Area extends EventEmitter {
         this.codeDatas = codeDatas;
 
         codeDatas.forEach(codeData => {
-            this.addCode(codeData);
+            this.addCode(this.makeCode(codeData));
         });
     }
 
-    addCode(codeData : CodeData) : Code {
-        const code = this.codeLoader.load(codeData, this.contexts);
+    makeCode(codeData : CodeData) {
+        return this.codeLoader.load(codeData, this.contexts);
+    }
+
+    addCode(code : Code) : Code {
         this.controllerNames.forEach(controllerName => {
             code.addController(controllerName);
         });
         this.codes.push(code);
         //Data
-        this.codeDatas.push(codeData);
+        this.codeDatas.push(code.codeData);
 
         //event
         code.on("unlink", () => {
@@ -62,6 +65,9 @@ class Area extends EventEmitter {
         });
         this.emit("codeAdded", code);
         return code;
+    }
+    addCodeByCodeData(codeData : CodeData) {
+        return this.addCode(this.makeCode(codeData));
     }
     removeCode(code : Code) {
         const codeIndex = this.codes.indexOf(code);

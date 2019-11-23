@@ -4,13 +4,7 @@ import ControllerLoader from "../Loader/ControllerLoader";
 import Controller from "../Element/Controller";
 
 
-class ControllerLinkingPoint extends LinkingPoint<Controller, Controller> {
-    constructor() {
-        super();
-    }
-    loadData(controller : Controller) {
-        return controller
-    } 
+class ControllerLinkingPoint extends LinkingPoint<Controller> {
 }
 
 export default ControllerLinkingPoint;
