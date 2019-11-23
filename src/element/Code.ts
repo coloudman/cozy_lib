@@ -11,11 +11,11 @@ import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPoi
 import EventEmitter from "wolfy87-eventemitter";
 
 declare interface Code {
-    on(event : "stopped", listener : () => void) : this
+    on(event : "stopped" | "unlink", listener : () => void) : this
     on(event: string, listener: Function): this
     on(event: RegExp, listener: Function): this
 
-    emit(event : "stopped") : this
+    emit(event : "stopped" | "unlink") : this
     emit(event : string, ...args : any): this
     emit(event : RegExp, ...args : any): this
 }
@@ -79,8 +79,8 @@ class Code extends EventEmitter {
                 this.codeData.linkingPointsData[linkingPointName] = codeData;
 
 
-                //추가!! "자식이" 부모랑 끊기를 원할 때(스탑됬을 때), 그 연결점에서 연결을 끊습니다.
-                code.on("stopped", ()=>{
+                //추가!! "자식이" 부모랑 끊기를 원할 때, 그 연결점에서 연결을 끊습니다.
+                code.on("unlink", ()=>{
                     this.unlink(linkingPointName);
                 });
             })
