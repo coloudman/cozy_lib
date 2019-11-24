@@ -36,7 +36,7 @@ class Area extends EventEmitter {
     codeDatas: CodeData[];
     contexts: { [controllerName: string]: Context; };
     composers: Composers;
-    areaData: any;
+    areaData: AreaData;
     contextLoaders: { [controllerName: string]: ContextLoader; };
     composerLoaders: any;
 
@@ -86,7 +86,6 @@ class Area extends EventEmitter {
     makeCode(codeData : CodeData) {
         return this.codeLoader.load(codeData, this.contexts);
     }
-
     addCode(code : Code) : Code {
         this.controllerNames.forEach(controllerName => {
             code.addController(controllerName);
@@ -132,29 +131,22 @@ class Area extends EventEmitter {
         this.controllerNames.push(controllerName);
     }
 
+
     /* Context 관련 */
-    makeContext(controllerName : string, contextData : ContextData) {
-        return this.contextLoaders[controllerName].load(contextData);
+    makeContext(controllerName : string) {
+        return this.contextLoaders[controllerName].load(this.areaData.contextDatas[controllerName]);
     }
-    addContext(controllerName : string, context : Context) {
-        this.contexts[controllerName] = context;
-        return context;
-    }
-    addContextFromContextData(controllerName : string, contextData : ContextData) {
-        return this.contexts[controllerName] = this.makeContext(controllerName, contextData);
+    addContext(controllerName : string) {
+        return this.contexts[controllerName] = this.makeContext(controllerName);
     }
 
 
     /* Compose 관련 */
-    makeComposer(controllerName : string, composerData : ComposerData) {
-        return this.composerLoaders[controllerName].load(composerData);
+    makeComposer(controllerName : string) {
+        return this.composerLoaders[controllerName].load(this.areaData.composerDatas[controllerName]);
     }
-    addComposer(controllerName : string, composer : Composer) {
-        this.composers[controllerName] = composer;
-        return composer;
-    }
-    addComposerFromComposerData(controllerName : string, composerData : ComposerData) {
-        return this.composers[controllerName] = this.makeComposer(controllerName, composerData);
+    addComposer(controllerName : string) {
+        return this.composers[controllerName] = this.makeComposer(controllerName);
     }
 
     compose(controllerName : string) {
