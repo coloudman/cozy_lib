@@ -44,6 +44,7 @@ class Code extends EventEmitter {
     }
 
     codeData: CodeData
+    /*
     exportCodeData() {
         const codeData = JSON.parse(JSON.stringify(this.codeData));
         //쓸데없는 컨트롤러데이터들 처리해버려서 JSON 짧게 만들자!
@@ -53,7 +54,7 @@ class Code extends EventEmitter {
             }
         });
         return codeData;
-    }
+    }*/
 
     data: any;
 
