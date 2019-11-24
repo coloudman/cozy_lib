@@ -34,7 +34,7 @@ class Code extends EventEmitter {
     
     controllerLoaders: ControllerLoaders;
     codeLoader: CodeLoader;
-    codeData: CodeData;
+
     contexts: {
         [controllerName:string]:Context
     };
@@ -43,12 +43,27 @@ class Code extends EventEmitter {
         [name : string]: Controller
     }
 
+    private _codeData: CodeData
+    get codeData() {
+        const codeData = JSON.parse(JSON.stringify(this._codeData));
+        //쓸데없는 컨트롤러데이터들 처리해버려서 JSON 짧게 만들자!
+        Object.entries(codeData.controllerDatas).forEach(([controllerName, data]) => {
+            if(!Object.keys(data).length) {
+                delete codeData.controllerDatas[controllerName];
+            }
+        });
+        return this.codeData;
+    }
+    set codeData(codeData) {
+        this._codeData = codeData;
+    }
+
     data: any;
 
     constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, codeData : CodeData, contexts : {[controllerName:string]:Context}) {
         super();
 
-        this.codeData = codeData;
+        this.codeData = JSON.parse(JSON.stringify(codeData)); //연결 안되도록 복사
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;
