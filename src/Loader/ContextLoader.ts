@@ -23,7 +23,7 @@ export default class ContextLoader  {
 
         const Class = foundPackage.body;
 
-        const instance = new Class(contextData.data);
+        const instance = new Class(contextData);
         return instance;
     }
 }
