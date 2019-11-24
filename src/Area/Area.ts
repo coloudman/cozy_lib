@@ -60,7 +60,7 @@ class Area extends EventEmitter {
     
     constructor(codeLoader : CodeLoader, areaData : AreaData, contextLoaders : {[controllerName:string]:ContextLoader}, composerLoaders : {[controllerName:string]:ComposerLoader}, defaultContexts : string[] = [], defaultComposers : string[] = []) {
         super();
-
+        this.controllerNames = [];
         this.areaData = areaData;
 
         this.codeLoader = codeLoader;
