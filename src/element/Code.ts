@@ -43,9 +43,9 @@ class Code extends EventEmitter {
         [name : string]: Controller
     }
 
-    private _codeData: CodeData
-    get codeData() {
-        const codeData = JSON.parse(JSON.stringify(this._codeData));
+    codeData: CodeData
+    exportCodeData() {
+        const codeData = JSON.parse(JSON.stringify(this.codeData));
         //쓸데없는 컨트롤러데이터들 처리해버려서 JSON 짧게 만들자!
         Object.entries(codeData.controllerDatas).forEach(([controllerName, data]) => {
             if(!Object.keys(data).length) {
@@ -53,9 +53,6 @@ class Code extends EventEmitter {
             }
         });
         return codeData;
-    }
-    set codeData(codeData) {
-        this._codeData = codeData;
     }
 
     data: any;
