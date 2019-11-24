@@ -32,13 +32,13 @@ class Area extends EventEmitter {
 
     codeLoader: CodeLoader;
     codes: Code[];
-    controllerNames: string[];
     codeDatas: CodeData[];
     contexts: { [controllerName: string]: Context; };
     composers: Composers;
     areaData: AreaData;
     contextLoaders: { [controllerName: string]: ContextLoader; };
     composerLoaders: any;
+    controllerNames : string[]
 
     exportAreaData():AreaData {
         const contextDatas : {[controllerName:string]:ContextData}= {};
@@ -58,7 +58,7 @@ class Area extends EventEmitter {
         }
     }
     
-    constructor(codeLoader : CodeLoader, areaData : AreaData, contextLoaders : {[controllerName:string]:ContextLoader}, composerLoaders : {[controllerName:string]:ComposerLoader}) {
+    constructor(codeLoader : CodeLoader, areaData : AreaData, contextLoaders : {[controllerName:string]:ContextLoader}, composerLoaders : {[controllerName:string]:ComposerLoader}, defaultContexts : string[] = [], defaultComposers : string[] = []) {
         super();
 
         this.areaData = areaData;
@@ -68,16 +68,19 @@ class Area extends EventEmitter {
         //콘텍스트가 있으면 모두다 로드함
         this.contextLoaders = contextLoaders;
         this.contexts = {};
-        Object.entries(contextLoaders).forEach(([controllerName, contextLoader]) => {
+        defaultContexts.forEach(controllerName => {
+            this.addContext(controllerName);
         });
 
         //컴포저가 있으면 모두다 로드함
         this.composerLoaders = composerLoaders;
         this.composers = {};
+        defaultComposers.forEach(controllerName => {
+            this.addComposer(controllerName);
+        });
 
 
         this.codes = [];
-        this.controllerNames = [];
 
         this.codeDatas = this.areaData.codeDatas;
 

@@ -11,7 +11,7 @@ import Contexts from "../structClass/Contexts";
 
 export default class CodeLoader extends Loader<CodePackage> {
     controllerLoaders: ControllerLoaders;
-    constructor(packages : Packages<CodePackage>, controllerLoaders : ControllerLoaders, contexts : Contexts) {
+    constructor(packages : Packages<CodePackage>, controllerLoaders : ControllerLoaders) {
         super(packages);
         this.controllerLoaders = controllerLoaders;
     }
