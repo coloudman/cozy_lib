@@ -45,11 +45,16 @@ class Area extends EventEmitter {
         Object.entries(this.contexts).forEach(([controllerName, context]) => {
             contextDatas[controllerName] = context.exportContextData();
         });
+        const composerDatas : {[controllerName:string]:ComposerData}= {};
+        Object.entries(this.composers).forEach(([controllerName, composer]) => {
+            composerDatas[controllerName] = composer.exportComposerData();
+        });
         return {
             codeDatas:this.codes.map(code => {
                 return code.exportCodeData();
             }),
-            contextDatas
+            contextDatas,
+            composerDatas
         }
     }
     
@@ -149,11 +154,12 @@ class Area extends EventEmitter {
         return this.composers[controllerName] = this.makeComposer(controllerName);
     }
 
-    compose(controllerName : string) {
+
+    compose(controllerName : string, methodName : string) {
         const controllers = this.codes.map(code => {
             return code.getController(controllerName);
         });
-        return this.composers[controllerName].compose(controllers);
+        return (<any>this.composers[controllerName])[methodName](controllers);
     }
 }
 
