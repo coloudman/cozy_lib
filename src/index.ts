@@ -28,6 +28,11 @@ import LinkingPointsData from "./struct/LinkingPointsData";
 import Context from "./element/Context";
 import ControllerInfo from "./structClass/ControllerInfo";
 import ControllerLoaders from "./structClass/ControllerLoaders";
+import ComposerPackage from "./package/ComposerPackage";
+import ContextPackage from "./package/ContextPackage";
+import ComposerLoader from "./Loader/ComposerLoader";
+import ContextLoader from "./Loader/ContextLoader";
+import Composer from "./element/Composer";
 
 //Struct
 
@@ -37,6 +42,8 @@ export {
     Area,
 
     Code, 
+    Composer,
+    Context,
     Controller,
     
     LinkingPoint,
@@ -49,10 +56,14 @@ export {
 
     Loader,
     CodeLoader,
+    ComposerLoader,
+    ContextLoader,
     ControllerLoader,
 
     Package,
     CodePackage,
+    ComposerPackage,
+    ContextPackage,
     ControllerPackage,
 
     CodeData,
@@ -60,7 +71,6 @@ export {
     ID,
     LinkingPointsData,
 
-    Context,
     ControllerInfo,
     ControllerLoaders
 };
