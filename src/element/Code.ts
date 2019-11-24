@@ -53,6 +53,10 @@ class Code extends EventEmitter {
                 delete codeData.controllerDatas[controllerName];
             }
         });
+        //자식도
+        this.runOnExistLinkingPoints((linkingPointName, code) => {
+            codeData.linkingPointsData[linkingPointName] = code.exportCodeData();
+        });
         return codeData;
     }
 
