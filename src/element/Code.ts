@@ -5,7 +5,7 @@ import ControllerLoaders from "../structClass/ControllerLoaders";
 import CodeLoader from "../Loader/CodeLoader";
 import CodeData from "../struct/CodeData";
 import Controller from "./Controller";
-import Context from "../structClass/Context";
+import Context from "./Context";
 import CodeLinkingPointsManager from "../LinkingPoint/CodeLinkingPointsManager";
 import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
 import EventEmitter from "wolfy87-eventemitter";
@@ -44,7 +44,7 @@ class Code extends EventEmitter {
     }
 
     codeData: CodeData
-    /*
+    
     exportCodeData() {
         const codeData = JSON.parse(JSON.stringify(this.codeData));
         //쓸데없는 컨트롤러데이터들 처리해버려서 JSON 짧게 만들자!
@@ -54,14 +54,14 @@ class Code extends EventEmitter {
             }
         });
         return codeData;
-    }*/
+    }
 
     data: any;
 
     constructor(codeLoader : CodeLoader, controllerLoaders : ControllerLoaders, codeData : CodeData, contexts : {[controllerName:string]:Context}) {
         super();
 
-        this.codeData = JSON.parse(JSON.stringify(codeData)); //연결 안되도록 복사
+        this.codeData = codeData; //연결 안되도록 복사
 
         this.codeLoader = codeLoader;
         this.controllerLoaders = controllerLoaders;

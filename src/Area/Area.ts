@@ -5,8 +5,11 @@ import Code from "../Element/Code";
 import Controller from "../Element/Controller";
 
 import EventEmitter from "wolfy87-eventemitter";
-import Context from "../structClass/Context";
+import Context from "../element/Context";
 import Composers from "../structClass/Composers";
+import AreaData from "../struct/AreaData";
+import ContextLoader from "../Loader/ContextLoader";
+import ContextData from "../struct/ContextData";
 
 
 declare interface Area {
@@ -30,19 +33,38 @@ class Area extends EventEmitter {
     codeDatas: CodeData[];
     contexts: { [controllerName: string]: Context; };
     composers: Composers;
+    areaData: any;
+
+    exportAreaData():AreaData {
+        const contextDatas : {[controllerName:string]:ContextData}= {};
+        Object.entries(this.contexts).forEach(([controllerName, context]) => {
+            contextDatas[controllerName] = context.exportContextData();
+        });
+        return {
+            codeDatas:this.codes.map(code => {
+                return code.exportCodeData();
+            }),
+            contextDatas
+        }
+    }
     
-    constructor(codeLoader : CodeLoader, codeDatas : CodeData[], contexts : {[controllerName:string]:Context}) {
+    constructor(codeLoader : CodeLoader, areaData : AreaData, contextLoaders : {[controllerName:string]:ContextLoader}) {
         super();
 
+        this.areaData = areaData;
+
         this.codeLoader = codeLoader;
-        this.contexts = contexts;
+        this.contexts = {}
+        Object.entries(contextLoaders).forEach(([controllerName, contextLoader]) => {
+            this.contexts[controllerName] = contextLoader.load(this.areaData.contextDatas[controllerName]);
+        });
         
         this.codes = [];
         this.controllerNames = [];
 
-        this.codeDatas = codeDatas;
+        this.codeDatas = this.areaData.codeDatas;
 
-        codeDatas.forEach(codeData => {
+        this.codeDatas.forEach(codeData => {
             this.addCode(this.makeCode(codeData));
         });
     }
@@ -88,7 +110,6 @@ class Area extends EventEmitter {
         });
         return controllers;
     }
-
     addController(controllerName : string) {
         this.codes.forEach(code => {
             code.addController(controllerName);
@@ -111,7 +132,7 @@ class Area extends EventEmitter {
         const controllers = this.codes.map(code => {
             return code.getController(controllerName);
         });
-        return this.composers[controllerName](controllers, this.contexts[controllerName]);
+        return this.composers[controllerName].compose(controllers);
     }
 }
 

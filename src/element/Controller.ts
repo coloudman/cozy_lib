@@ -1,7 +1,7 @@
 import Code from "./Code";
 
 import Data from "../struct/Data";
-import Context from "../structClass/Context";
+import Context from "./Context";
 import EventEmitter from "wolfy87-eventemitter";
 import ControllerLinkingPointsManager from "../LinkingPoint/ControllerLinkingPointsManager";
 

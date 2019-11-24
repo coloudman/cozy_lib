@@ -7,11 +7,12 @@ import ControllerLoaders from "../structClass/ControllerLoaders";
 import CodeData from "../struct/CodeData";
 import Context from "../element/Context";
 import CodeLoader from "../Loader/CodeLoader";
+import { Data } from "..";
 
-export default interface CodePackage extends Package<Code> {
+export default interface ContextPackage {
+    id: string
+    version: string
     body: {
-        [name:string]: {
-            new(codeLoader:CodeLoader, controllerLoaders : ControllerLoaders, codeData : CodeData, contexts : {[controllerName:string]:Context}): Code
-        }
+        new(data : Data): Context
     }
 }

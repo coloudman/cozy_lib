@@ -1,4 +1,4 @@
-import Context from "./Context";
+import Context from "../element/Context";
 
 
 export default interface Contexts {

@@ -1,10 +1,10 @@
 
-import Loader from "./ElementLoader";
+import Loader from "./Loader";
 import Code from "../Element/Code";
 import CodePackage from "../Package/CodePackage";
 import CodeData from "../struct/CodeData";
 
-import Context from "../structClass/Context";
+import Context from "../element/Context";
 import ControllerLoaders from "../structClass/ControllerLoaders";
 import Packages from "../Package/Packages";
 import Contexts from "../structClass/Contexts";

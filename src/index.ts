@@ -12,7 +12,7 @@ import CodeLinkingPointsManager from "./LinkingPoint/CodeLinkingPointsManager";
 import ControllerLinkingPoint from "./LinkingPoint/ControllerLinkingPoint";
 import ControllerLinkingPointsManager from "./LinkingPoint/ControllerLinkingPointsManager";
 
-import Loader from "./Loader/ElementLoader";
+import Loader from "./Loader/Loader";
 import CodeLoader from "./Loader/CodeLoader";
 import ControllerLoader from "./Loader/ControllerLoader";
 
@@ -25,7 +25,7 @@ import Data from "./struct/Data";
 import ID from "./struct/ID";
 import LinkingPointsData from "./struct/LinkingPointsData";
 
-import Context from "./structClass/Context";
+import Context from "./element/Context";
 import ControllerInfo from "./structClass/ControllerInfo";
 import ControllerLoaders from "./structClass/ControllerLoaders";
 

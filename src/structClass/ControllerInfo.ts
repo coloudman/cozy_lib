@@ -1,6 +1,6 @@
 import Code from "../Element/Code";
 import ID from "../struct/ID";
-import Context from "./Context";
+import Context from "../element/Context";
 import Data from "../struct/Data";
 import LinkingPointsManager from "../LinkingPoint/LinkingPointsManager";
 import Controller from "../Element/Controller";
