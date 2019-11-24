@@ -10,6 +10,9 @@ import Composers from "../structClass/Composers";
 import AreaData from "../struct/AreaData";
 import ContextLoader from "../Loader/ContextLoader";
 import ContextData from "../struct/ContextData";
+import ComposerData from "../struct/ComposerData";
+import Composer from "../element/Composer";
+import ComposerLoader from "../Loader/ComposerLoader";
 
 
 declare interface Area {
@@ -34,6 +37,8 @@ class Area extends EventEmitter {
     contexts: { [controllerName: string]: Context; };
     composers: Composers;
     areaData: any;
+    contextLoaders: { [controllerName: string]: ContextLoader; };
+    composerLoaders: any;
 
     exportAreaData():AreaData {
         const contextDatas : {[controllerName:string]:ContextData}= {};
@@ -48,17 +53,24 @@ class Area extends EventEmitter {
         }
     }
     
-    constructor(codeLoader : CodeLoader, areaData : AreaData, contextLoaders : {[controllerName:string]:ContextLoader}) {
+    constructor(codeLoader : CodeLoader, areaData : AreaData, contextLoaders : {[controllerName:string]:ContextLoader}, composerLoaders : {[controllerName:string]:ComposerLoader}) {
         super();
 
         this.areaData = areaData;
 
         this.codeLoader = codeLoader;
-        this.contexts = {}
+
+        //콘텍스트가 있으면 모두다 로드함
+        this.contextLoaders = contextLoaders;
+        this.contexts = {};
         Object.entries(contextLoaders).forEach(([controllerName, contextLoader]) => {
-            this.contexts[controllerName] = contextLoader.load(this.areaData.contextDatas[controllerName]);
         });
-        
+
+        //컴포저가 있으면 모두다 로드함
+        this.composerLoaders = composerLoaders;
+        this.composers = {};
+
+
         this.codes = [];
         this.controllerNames = [];
 
@@ -69,6 +81,8 @@ class Area extends EventEmitter {
         });
     }
 
+
+    /* Code */
     makeCode(codeData : CodeData) {
         return this.codeLoader.load(codeData, this.contexts);
     }
@@ -103,6 +117,7 @@ class Area extends EventEmitter {
         this.emit("codeRemoved", code);
     }
 
+    /* Controller */
     getController(controllerName : string) : Controller[] {
         const controllers : Controller[] = [];
         this.codes.forEach(code => {
@@ -117,15 +132,29 @@ class Area extends EventEmitter {
         this.controllerNames.push(controllerName);
     }
 
+    /* Context 관련 */
+    makeContext(controllerName : string, contextData : ContextData) {
+        return this.contextLoaders[controllerName].load(contextData);
+    }
+    addContext(controllerName : string, context : Context) {
+        this.contexts[controllerName] = context;
+        return context;
+    }
+    addContextFromContextData(controllerName : string, contextData : ContextData) {
+        return this.contexts[controllerName] = this.makeContext(controllerName, contextData);
+    }
 
 
     /* Compose 관련 */
-
-    setComposers(composers : Composers) {
-        this.composers = composers;
+    makeComposer(controllerName : string, composerData : ComposerData) {
+        return this.composerLoaders[controllerName].load(composerData);
     }
-    getComposers() {
-        return this.composers;
+    addComposer(controllerName : string, composer : Composer) {
+        this.composers[controllerName] = composer;
+        return composer;
+    }
+    addComposerFromComposerData(controllerName : string, composerData : ComposerData) {
+        return this.composers[controllerName] = this.makeComposer(controllerName, composerData);
     }
 
     compose(controllerName : string) {
