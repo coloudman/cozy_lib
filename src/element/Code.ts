@@ -52,7 +52,7 @@ class Code extends EventEmitter {
                 delete codeData.controllerDatas[controllerName];
             }
         });
-        return this.codeData;
+        return codeData;
     }
     set codeData(codeData) {
         this._codeData = codeData;
